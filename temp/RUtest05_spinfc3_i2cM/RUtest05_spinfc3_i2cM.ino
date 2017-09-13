@@ -1,15 +1,15 @@
 #include <Wire.h>
 
 void setup() {
-  Wire.begin();        // join i2c bus (address optional for master)
-  Serial.begin(9600);  // start serial for output
+  Wire.begin();
+  Serial.begin(9600);
   while (!Serial) {
     ;
   }
 }
 
 void loop() {
-  for (int i = 0; i < 3; i++) {
+  for (byte i = 0; i < 3; i++) {
     Wire.beginTransmission(16);
     Wire.write(i);
     Wire.endTransmission();
