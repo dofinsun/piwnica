@@ -2,21 +2,21 @@
 #include <SPI.h>
 #include <Ethernet.h>
 
-int ERR_pin = 13;
-String Door_status, PIR5_status, TOUCHr_status, TOUCHl_status;
+const byte ERR_pin = 13;
+String Grate_status, PIR5_status, TOUCHr_status, TOUCHl_status;
 String NFC_UID[3] = {"", "", ""};
 String NFC_REP[3] = {"NFC1=", "NFC2=", "NFC3="};
-int PIR5_pin = A0;
-int TOUCHr_pin = A1;
-int TOUCHl_pin = A2;
-int TPLedr_pin = A3;
-int TPLedl_pin = A4;
-int DLL_pin = 4;
-int DLS_pin = 5;
-int DDc_pin = 8;
-int DDo_pin = 9;
-int Mon_pin = 11;
-int Mdir_pin = 12;
+const byte PIR5_pin = A0;
+const byte TOUCHr_pin = A1;
+const byte TOUCHl_pin = A2;
+const byte TPLedr_pin = A3;
+const byte TPLedl_pin = A4;
+const byte DLL_pin = 4;
+const byte DLS_pin = 5;
+const byte DDc_pin = 8;
+const byte DDo_pin = 9;
+const byte Mon_pin = 11;
+const byte Mdir_pin = 12;
 
 byte mac[] = {0xD0, 0xF1, 0xC0, 0xA8, 0x02, 0x06};
 IPAddress ip(192, 168, 2, 6);
@@ -55,7 +55,7 @@ void loop() {
    byte ACT = 0;
    
   //get NFC status by i2c
-  for (int i = 0; i < 3; i++) {
+  for (byte i = 0; i < 3; i++) {
     NFC_UID[i] = "";
     Wire.beginTransmission(16);
     Wire.write(i);
@@ -95,13 +95,13 @@ void loop() {
     digitalWrite(TPLedl_pin, HIGH);
   }
   
-  //Read door status;
+  //Read Grate status;
    DDc = digitalRead(DDc_pin);
    DDo = digitalRead(DDo_pin);
   if (DDo&&!DDc) {
-    Door_status = "Closed";
+    Grate_status = "Closed";
   } else {
-    Door_status = "Open";
+    Grate_status = "Open";
   }
   
   //Reply to network requests
@@ -109,37 +109,37 @@ void loop() {
   if (client) {
     if (client.available()) {
         switch (client.read()) {
-          case 's':               //reply with status Door, PIR5, TOUCHr, TOUCHl, NFC`s;
+          case 's':               //reply with status Grate, PIR5, TOUCHr, TOUCHl, NFC`s;
             client.println("");
-            client.print("Door=");
-            client.println(Door_status);
+            client.print("Grate=");
+            client.println(Grate_status);
             client.print("PIR5=");
             client.println(PIR5_status);
             client.print("TOUCHr=");
             client.println(TOUCHr_status);
             client.print("TOUCHl=");
             client.println(TOUCHl_status);
-            for (int i = 0; i < 3; i++) {
+            for (byte i = 0; i < 3; i++) {
               client.print(NFC_REP[i]);
               client.println(NFC_UID[i]);
             }
             break;
           case 'q':               //unlock DLL
-            digitalWrite(DLL_pin, HIGH);
-            break;
-          case 'w':               //lock DLL
             digitalWrite(DLL_pin, LOW);
             break;
-          case 'e':               //unlock DLS
-            digitalWrite(DLS_pin, HIGH);
+          case 'w':               //lock DLL
+            digitalWrite(DLL_pin, HIGH);
             break;
-          case 'r':               //lock DLS
+          case 'e':               //unlock DLS
             digitalWrite(DLS_pin, LOW);
             break;
-          case 'a':               //Open door
+          case 'r':               //lock DLS
+            digitalWrite(DLS_pin, HIGH);
+            break;
+          case 'a':               //Open Grate
             ACT = 1;
             break;
-          case 'd':               //Close door
+          case 'd':               //Close Grate
             ACT = 2;
             break;
         }
@@ -158,6 +158,7 @@ void loop() {
       DDo = digitalRead(DDo_pin);
     }
     digitalWrite(Mon_pin, LOW);
+    delay(100);
     digitalWrite(Mdir_pin, HIGH);
     ACT = 0;
   }
