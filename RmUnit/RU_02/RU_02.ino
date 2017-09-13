@@ -1,17 +1,17 @@
 String DD23_status, DDdpk_status, PIR3_status, PIR4_status, JACK_status, KEY_status;
-int ERR_pin = 13;
-int DD23_pin = 12;
-int DDdpk_pin = 11;
-int PIR3_pin = A2;
-int PIR4_pin = A3;
-int RED23_pin = A0;
-int GR23_pin = A1;
-int DL23_pin = A4;
-int DLdpk_pin = A5;
-const int LED_pin[3] = { 0, 1, 2 };
-const int JACK_in_pin[3] = { 3, 5, 7 };
-const int JACK_out_pin[3] = { 4, 6, 8 };
-int KEY_pin = 9;
+const byte ERR_pin = 13;
+const byte DD23_pin = 12;
+const byte DDdpk_pin = 11;
+const byte PIR3_pin = A2;
+const byte PIR4_pin = A3;
+const byte RED23_pin = A0;
+const byte GR23_pin = A1;
+const byte DL23_pin = A4;
+const byte DLdpk_pin = A5;
+const byte LED_pin[3] = { 0, 1, 2 };
+const byte JACK_in_pin[3] = { 3, 5, 7 };
+const byte JACK_out_pin[3] = { 4, 6, 8 };
+const byte KEY_pin = 9;
 
 #include <SPI.h>
 #include <Ethernet.h>
@@ -83,7 +83,7 @@ void loop() {
     PIR4_status = "Clear";
   }
 
-  for (int thisPin = 0; thisPin < 3; thisPin++) {
+  for (byte thisPin = 0; thisPin < 3; thisPin++) {
     for (byte i = 0; i < 10; i++) {
       digitalWrite(JACK_out_pin[thisPin], HIGH);
       delay(1);
