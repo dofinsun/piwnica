@@ -44,7 +44,7 @@ void setup() {
   pinMode(Mdir_pin, OUTPUT);
   digitalWrite(Mon_pin, LOW);
   digitalWrite(Mdir_pin, HIGH);
-  
+
   Wire.begin();
   Ethernet.begin(mac, ip, myDns, gateway, subnet);
   server.begin();
@@ -53,7 +53,7 @@ void setup() {
 void loop() {
    boolean drum, DDo, DDc, TPr, TPl;
    byte ACT = 0;
-   
+
   //get NFC status by i2c
   for (byte i = 0; i < 3; i++) {
     NFC_UID[i] = "";
@@ -68,7 +68,7 @@ void loop() {
     }
     delay(10);
   }
-  
+
   //Read PIR status
   drum = digitalRead(PIR5_pin);
   if (drum) {
@@ -76,7 +76,7 @@ void loop() {
   } else {
     PIR5_status = "Clear";
   }
-  
+
   //Read touchpad status
   drum = digitalRead(TOUCHr_pin);
   if (drum) {
@@ -94,7 +94,7 @@ void loop() {
     TOUCHl_status = "Empty";
     digitalWrite(TPLedl_pin, HIGH);
   }
-  
+
   //Read Grate status;
    DDc = digitalRead(DDc_pin);
    DDo = digitalRead(DDo_pin);
@@ -103,13 +103,13 @@ void loop() {
   } else {
     Grate_status = "Open";
   }
-  
+
   //Reply to network requests
   EthernetClient client = server.available();
   if (client) {
     if (client.available()) {
         switch (client.read()) {
-          case 's':               //reply with status Grate, PIR5, TOUCHr, TOUCHl, NFC`s;
+          case 's': //reply with status Grate, PIR5, TOUCHr, TOUCHl, NFC`s;
             client.println("");
             client.print("Grate=");
             client.println(Grate_status);
@@ -147,7 +147,7 @@ void loop() {
   }
   delay(5);
   client.stop();
-  
+
   if (ACT == 1) {
     digitalWrite(Mdir_pin, LOW);
     delay(100);
