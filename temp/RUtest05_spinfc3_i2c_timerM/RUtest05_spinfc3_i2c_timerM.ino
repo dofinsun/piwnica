@@ -5,7 +5,7 @@
 
 const byte ERR_pin = 13;
 String Grate_status, PIR5_status, TOUCHr_status, TOUCHl_status;
-volatile String NFC_UID[3] = {"", "", ""};
+String NFC_UID[3] = {"", "", ""};
 String NFC_REP[3] = {"NFC1=", "NFC2=", "NFC3="};
 const byte PIR5_pin = A0;
 const byte TOUCHr_pin = A1;
