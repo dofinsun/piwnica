@@ -13,7 +13,7 @@ void loop() {
     Wire.beginTransmission(16);
     Wire.write(i);
     Wire.endTransmission();
-    delay(10);
+    delay(1);
     Serial.print(i);
     Serial.print(" ");
     Wire.requestFrom(16, 4);
@@ -22,7 +22,7 @@ void loop() {
       Serial.print(String(c,HEX));
     }
     Serial.println();
-    delay(10);
+    delay(1);
   }
-  delay(900);
+  delay(1);
 }
