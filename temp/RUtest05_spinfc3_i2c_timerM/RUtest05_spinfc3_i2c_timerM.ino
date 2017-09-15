@@ -1,7 +1,7 @@
 #include <Wire.h>
 #include <SPI.h>
 #include <Ethernet.h>
-#include <timer-api.h>
+#include "timer-api.h"
 
 const byte ERR_pin = 13;
 String Grate_status, PIR5_status, TOUCHr_status, TOUCHl_status;
@@ -178,12 +178,12 @@ void timer_handle_interrupts(int timer) {
     Wire.beginTransmission(16);
     Wire.write(i);
     Wire.endTransmission();
-    delay(1);
+    delay(10);
     Wire.requestFrom(16, 4);
     while (Wire.available()) {
       byte c = Wire.read();
       NFC_UID[i] += String(c,HEX);
     }
-    delay(1);
+    delay(10);
   }
 }
