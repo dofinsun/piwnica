@@ -1,6 +1,7 @@
 #include <Wire.h>
 #include <SPI.h>
 #include <Ethernet.h>
+#include "timer-api.h"
 
 const byte ERR_pin = 13;
 String Grate_status, PIR5_status, TOUCHr_status, TOUCHl_status;
@@ -48,26 +49,13 @@ void setup() {
   Wire.begin();
   Ethernet.begin(mac, ip, myDns, gateway, subnet);
   server.begin();
+
+  timer_init_ISR_1Hz(TIMER_DEFAULT);
 }
 
 void loop() {
    boolean drum, DDo, DDc, TPr, TPl;
    byte ACT = 0;
-
-  //get NFC status by i2c
-  for (byte i = 0; i < 3; i++) {
-    NFC_UID[i] = "";
-    Wire.beginTransmission(16);
-    Wire.write(i);
-    Wire.endTransmission();
-    delay(10);
-    Wire.requestFrom(16, 4);
-    while (Wire.available()) {
-      byte c = Wire.read();
-      NFC_UID[i] += String(c,HEX);
-    }
-    delay(10);
-  }
 
   //Read PIR status
   drum = digitalRead(PIR5_pin);
@@ -180,5 +168,22 @@ void loop() {
     }
     digitalWrite(Mon_pin, LOW);
     ACT = 0;
+  }
+}
+
+void timer_handle_interrupts(int timer) {
+    //get NFC status by i2c each second
+    for (byte i = 0; i < 3; i++) {
+    NFC_UID[i] = "";
+    Wire.beginTransmission(16);
+    Wire.write(i);
+    Wire.endTransmission();
+    delay(10);
+    Wire.requestFrom(16, 4);
+    while (Wire.available()) {
+      byte c = Wire.read();
+      NFC_UID[i] += String(c,HEX);
+    }
+    delay(10);
   }
 }
