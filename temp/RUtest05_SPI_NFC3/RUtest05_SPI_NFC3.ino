@@ -1,11 +1,11 @@
-  // Arduino Nano!!!!
+// Arduino Nano!!!!
+// for testing RU05 slave part.
   #include <SPI.h>
   #include <PN532_SPI.h>
   #include "PN532.h"
   
-  int ERR_pin = 13;
-  int msglength = 4;
-  int nfcnum = 1;
+  const byte msglength = 4;
+  const byte nfcnum = 1;
   
   uint8_t UID1_value [] = { 0, 0, 0, 0, 0, 0, 0 };
   uint8_t UID2_value [] = { 0, 0, 0, 0, 0, 0, 0 };
@@ -24,23 +24,15 @@
   PN532 nfc3(pn532spi3);
 
 void setup(void) {
+  delay(4000);
   Serial.begin(9600);
-  while (!Serial) {
-    ;
-  }
-  
-  pinMode(ERR_pin, OUTPUT);
-  digitalWrite(ERR_pin, LOW);
-  
   uint32_t versiondata;
   
   nfc1.begin();
   versiondata = 0;
   versiondata = nfc1.getFirmwareVersion();
   if (! versiondata) {
-    digitalWrite(ERR_pin, HIGH);
     Serial.print("Didn't find PN53x board 1");
-    while (1); // halt on error
   }
 
   Serial.print("Found chip 1 PN5"); Serial.println((versiondata>>24) & 0xFF, HEX); 
@@ -53,9 +45,7 @@ void setup(void) {
   versiondata = 0;
   versiondata = nfc2.getFirmwareVersion();
   if (! versiondata) {
-    digitalWrite(ERR_pin, HIGH);
     Serial.print("Didn't find PN53x board 2");
-    while (1);
   }
 
   Serial.print("Found chip 2 PN5"); Serial.println((versiondata>>24) & 0xFF, HEX); 
@@ -68,9 +58,7 @@ void setup(void) {
   versiondata = 0;
   versiondata = nfc3.getFirmwareVersion();
   if (! versiondata) {
-    digitalWrite(ERR_pin, HIGH);
     Serial.print("Didn't find PN53x board 3");
-    while (1);
   }
 
   Serial.print("Found chip 3 PN5"); Serial.println((versiondata>>24) & 0xFF, HEX); 
