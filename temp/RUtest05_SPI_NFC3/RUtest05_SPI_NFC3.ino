@@ -26,6 +26,9 @@
 void setup(void) {
   delay(4000);
   Serial.begin(9600);
+  while (!Serial) {
+    ; // wait for serial port to connect. Needed for native USB port only
+  }
   uint32_t versiondata;
   
   nfc1.begin();
