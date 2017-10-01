@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Management page</title>
+	<link rel="stylesheet" type="text/css" href="easyui/themes/black/easyui.css">
+	<link rel="stylesheet" type="text/css" href="easyui/themes/icon.css">
+	<link rel="stylesheet" type="text/css" href="easyui/demo/demo.css">
+	<script type="text/javascript" src="easyui/jquery.min.js"></script>
+	<script type="text/javascript" src="easyui/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="easyui/md5.js"></script>
+</head>
+<body>
+	<div id="w" class="easyui-window" title="Input parameters" data-options="modal:true,iconCls:'icon-save'" style="width:300px;height:260px;padding:10px;">
+        Game Room Status: <br><iframe frameborder="0"  src="scripts/rustatus.pl" style="width:120px;height:45px;;">
+        </iframe><br>
+        <select class="easyui-combobox" name="UsersCount" label="Players" style="width:100%">
+			<option value="3">3 players</option>
+			<option value="4">4 players</option>
+			<option value="5">5 players</option>
+			<option value="6">6 players</option>
+		</select>
+		<div style="margin-top:20px">
+			<input id="pass" class="easyui-passwordbox" prompt="Password" iconWidth="28" style="width:100%;height:25px;padding:10px">
+		</div>
+		<div style="margin-top:20px;text-align:right">
+			<a href="javascript:void(0)" class="easyui-linkbutton" onclick="GameStart()">Start</a>
+		</div>
+    </div>
+    
+	<div style="margin:10px 0;"></div>
+	<div class="easyui-tabs" data-options="fit:true,plain:true">
+		<div title="MAP" style="padding:10px;">
+			
+		</div>
+		<div title="DB status" style="padding:10px; width: 100%; height: 100%">
+			<div style="position:relative">
+				<div style="float:left; padding: 10px;">
+					<table class="easyui-datagrid" title="Remote Units" style="width:224px;height:230;" 
+					rownumbers="true" url="scripts/get_rmunits.pl" singleSelect="true">
+						<thead>
+							<tr>
+								<th field="RuName" with="50">RuName</th>
+								<th field="RuIp" with="50">RuIp</th>
+								<th field="Status" with="50">Status</th>
+							</tr>
+						</thead>
+					</table>
+					<br>
+					<table class="easyui-datagrid" title="Game Status" style="width:152px;height:305px" 
+					rownumbers="true" url="scripts/get_gamestat.pl" singleSelect="true">
+						<thead>
+							<tr>
+								<th field="Param" with="50">Parameter</th>
+								<th field="Value" with="50">Value</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+				<div style="float:left;">
+					<table class="easyui-datagrid" title="Remote Units Status" style="width:218px;height:555px" 
+					rownumbers="true" url="scripts/get_rmunitstatus.pl" singleSelect="true">
+						<thead>
+							<tr>
+								<th field="RemoteUnitNum" with="50">Unit number</th>
+								<th field="SensorName" with="50">Sensor</th>
+								<th field="SensorStatus" with="50">Value</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+<script>
+	function GameStart() {
+		if (md5($("#pass").val()) === "202cb962ac59075b964b07152d234b70") {
+			$('#w').window('close');
+			$.get('http://192.168.2.1:8080/scripts/thegame.pl')
+		}
+	}
+</script>
+</body>
+</html>
