@@ -5,32 +5,33 @@ use warnings;
 use diagnostics;
 use Net::Telnet ();
 use DBI;
+use Switch;
 
 my $script_path = $0;
 $script_path =~ s/\/[\w \d]+\.pl$//;
 chdir $script_path;
+
+my $Players;
+
+if (defined($ARGV[0]) && $ARGV[0] =~ /^\d$/) {
+	$Players = $ARGV[0];
+} else {
+	die "No variable defined \$Players "
+}
 
 # telnet and DBI initialisation
 my $tel = new Net::Telnet (Timeout => 10, Port => 404, Errmode => "return");
 my $dbh = DBI->connect("DBI:SQLite:dbname=pigame.db",
 	undef, undef, { RaiseError => 1, AutoCommit => 1 }) or die $DBI::errstr;
 
-my $debug = 0;	
+set_val_dbi('GameStat', 'Value', $Players, 'Param', 'Players');
+
+my $debug = 0;
 my $GameStep = 6;
 my $ForceNextLevel = 0;
 
-print "Content-type:text/html\r\n\r\n";
-print "<html>";
-print "<head>";
-print "</head>";
-print "<body>";
-print "ok.";
-print "</body>";
-print "</html>\n";
-
-
 my %RuIps = load_val_dbi('RuName', 'RuIp', 'RmUnits');						#RemoteUnit IP`s
-my %RuStat = load_val_dbi('RuName', 'Status', 'RmUnits');					#RemoteUnit status 
+my %RuStat = load_val_dbi('RuName', 'Status', 'RmUnits');					#RemoteUnit status
 my %RuSenVal = load_val_dbi('SensorName', 'SensorStatus', 'RmUnitStatus');	#RemoteUnits values
 my %GameStatus = load_val_dbi('Param', 'Value', 'GameStat');
 
@@ -55,26 +56,30 @@ until ($GameStep == 0) {
 	update_val_dbi();
 	$ForceNextLevel = load_FNL();
 	if ($ForceNextLevel == 2) {
-		print "Get signal END_of_the_Game\n";
+		print "Recived signal END_of_the_Game\n" if $debug;
+		$GameStep = 0;
+		$ForceNextLevel = 0;
+		set_val_dbi('GameStat', 'Value', $ForceNextLevel, 'Param', 'ForceNextLevel');
+	} elsif ($ForceNextLevel == 1) {
+		print "Recived signal Next Step\n" if $debug;
+		$GameStep--;
+		$ForceNextLevel = 0;
+		set_val_dbi('GameStat', 'Value', $ForceNextLevel, 'Param', 'ForceNextLevel');
 	}
 # Game logic
-	if ($GameStep == 3) {
-		$GameStep--;
-		set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
-		print "Step 3\n" if $debug;
-	} elsif ($GameStep == 2) {
-		$GameStep--;
-		set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
-		print "Step 2\n" if $debug;
-	} elsif ($GameStep == 1) {
-		$GameStep--;
-		set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
-		print "Step 1\n" if $debug;
-	} else {
-		$GameStep--;
-		set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
-		print "Step default case\n" if $debug;
+	switch ($GameStep) {
+		case 3		{ print "$GameStep step\n" if $debug;
+							$GameStep--;
+							set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel'); }
+		case 2		{ print "$GameStep step\n" if $debug;
+							$GameStep--;
+							set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel'); }
+		case 1		{ print "$GameStep step\n" if $debug;
+							$GameStep--;
+							set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel'); }
+		else			{	print "Current step is $GameStep \n" if $debug}
 	}
+	sleep 1;
 }
 set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
 set_val_dbi('GameStat', 'Value', 'Stop', 'Param', 'GameStat');
@@ -87,8 +92,8 @@ sub load_val_dbi {
 		my $sth = $dbh->prepare($stmt);
 		my $rv = $sth->execute() or die $DBI::errstr;
 		if ($rv < 0){
-			print $DBI::errstr;
-		} else {			
+			die $DBI::errstr;
+		} else {
 			my %returned_val;
 			while(my @row = $sth->fetchrow_array()) {
 			$returned_val{$row[0]} = $row[1];
@@ -99,14 +104,14 @@ sub load_val_dbi {
 }
 
 sub load_FNL {
-	my $stmt = qq(SELECT 'Value' from 'GameStat' where 'Param' = 'ForceNextLevel';);
+	my $stmt = qq(SELECT Value from GameStat where Param = 'ForceNextLevel';);
 	my $sth = $dbh->prepare($stmt);
 	my $rv = $sth->execute() or die $DBI::errstr;
 	if ($rv < 0){
-		print $DBI::errstr;
-	} else {		
+		die $DBI::errstr;
+	} else {
 		my @row = $sth->fetchrow_array();
-		print "ForceNextLevel = $row[0]\n" if $debug;
+		print "ForceNextLevel in DB = $row[0]\n" if $debug;
 		return $row[0];
 	}
 }
@@ -119,7 +124,7 @@ sub update_val_dbi {
 				my $stmt =qq(UPDATE RmUnits set Status = 'Up' where RuName = '$RuName';);
 				my $rv = $dbh->do($stmt) or die $DBI::errstr;
 				if ($rv <0 ){
-					print $DBI::errstr;
+					die $DBI::errstr;
 				} else {
 					print "Updated $rv rows: $stmt\n" if $debug;
 					$RuStat{$RuName} = 'Up';
@@ -135,7 +140,7 @@ sub update_val_dbi {
 						my $stmt =qq(UPDATE RmUnitStatus set sensorstatus = '$ParamVal' where sensorname = '$ParamName';);
 						my $rv = $dbh->do($stmt) or die $DBI::errstr;
 						if ($rv <0 ){
-							print $DBI::errstr;
+							die $DBI::errstr;
 						} else {
 							print "Updated $rv rows: $stmt\n" if $debug;
 							$RuSenVal{$ParamName} = $ParamVal;
@@ -148,7 +153,7 @@ sub update_val_dbi {
 				my $stmt =qq(UPDATE RmUnits set Status = 'Down' where RuName = '$RuName';);
 				my $rv = $dbh->do($stmt) or die $DBI::errstr;
 				if ($rv <0 ){
-					print $DBI::errstr;
+					die $DBI::errstr;
 				} else {
 					print "Updated $rv rows: $stmt\n" if $debug;
 					$RuStat{$RuName} = 'Down';
@@ -163,7 +168,7 @@ sub set_val_dbi {
 		my $stmt =qq(UPDATE $_[0] set $_[1] = '$_[2]' where $_[3] = '$_[4]';);
 		my $rv = $dbh->do($stmt) or die $DBI::errstr;
 		if ($rv <0 ){
-			print $DBI::errstr;
+			die $DBI::errstr;
 		} else {
 			print "Updated $rv rows: $stmt\n" if $debug;
 		}
