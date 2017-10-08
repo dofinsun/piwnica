@@ -1,19 +1,72 @@
 <!DOCTYPE html>
 <html>
-<body>
-<h3>A demonstration of how to access a BUTTON element</h3>
-<p>Click to disable the BUTTON element:</p>
-
-<button type="button" id="myBtn" onclick="myFunction()">Try it</button>
-
-<p id="demo"></p>
-
-<script>
-function myFunction() {
-    var x = document.getElementById("myBtn");
-    x.disabled = true;
+<head>
+<style>
+.rectangle {
+  fill: Gainsboro;
+  stroke-width: 5;
+  stroke: Black ;
 }
-</script>
+
+.walline {
+  stroke: Black;
+  stroke-width: 5;
+}
+
+.doorline {
+  stroke: DarkCyan;
+  stroke-width: 5;
+}
+
+.simafore {
+  stroke: Black;
+  stroke-width: 1;
+  fill: OrangeRed;
+}
+
+</style>
+</head>
+<body>
+
+<svg width="750" height="410">
+  <rect class="rectangle" x="2" y="2" width="740" height="400"/>
+
+  <line x1="0" y1="100" x2="75" y2="100" class="walline"/>
+  <line x1="0" y1="250" x2="25" y2="250" class="walline"/>
+  <line x1="75" y1="250" x2="225" y2="250" class="walline"/>
+  <line x1="125" y1="250" x2="125" y2="400" class="walline"/>
+  <line x1="125" y1="100" x2="500" y2="100" class="walline"/>
+  <line x1="225" y1="100" x2="225" y2="175" class="walline"/>
+  <line x1="225" y1="225" x2="225" y2="300" class="walline"/>
+  <line x1="225" y1="350" x2="225" y2="400" class="walline"/>
+  <line x1="425" y1="100" x2="425" y2="325" class="walline"/>
+  <line x1="425" y1="375" x2="425" y2="400" class="walline"/>
+  <line x1="425" y1="275" x2="475" y2="275" class="walline"/>
+  <line x1="475" y1="275" x2="475" y2="325" class="walline"/>
+  <line x1="475" y1="375" x2="475" y2="400" class="walline"/>
+  <line x1="550" y1="100" x2="625" y2="100" class="walline"/>
+  <line x1="625" y1="0" x2="625" y2="200" class="walline"/>
+  <line x1="625" y1="300" x2="625" y2="400" class="walline"/>
+  <line x1="625" y1="200" x2="740" y2="200" class="walline"/>
+  <line x1="625" y1="300" x2="740" y2="300" class="walline"/>
+
+  <line id="d12" x1="25" y1="250" x2="75" y2="250" class="doorline"/>
+
+  <circle id="sima0" cx="6" cy="350" r="5" class="simafore"/>
+  <circle id="sima1" cx="75" cy="250" r="5" class="simafore"/>
+  <circle id="sima2" cx="225" cy="225" r="5" class="simafore"/>
+  <circle id="sima3" cx="425" cy="375" r="5" class="simafore"/>
+  <circle id="sima4" cx="475" cy="375" r="5" class="simafore"/>
+
+</svg>
+
+<button type="button"
+onclick="document.getElementById('sima1').style.fill = 'ForestGreen'">On</button>
+<button type="button"
+onclick="document.getElementById('d12').setAttribute('y2',300);">open</button>
+
+
+</body>
 
 </body>
 </html>

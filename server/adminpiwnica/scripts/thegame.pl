@@ -63,6 +63,7 @@ until ($GameStep == 0) {
 	} elsif ($ForceNextLevel == 1) {
 		print "Recived signal Next Step\n" if $debug;
 		$GameStep--;
+		set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
 		$ForceNextLevel = 0;
 		set_val_dbi('GameStat', 'Value', $ForceNextLevel, 'Param', 'ForceNextLevel');
 	}
