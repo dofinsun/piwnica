@@ -18,4 +18,3 @@ if (-e "temp2.pl") {
 } else {
 	print "Cant find temp2.pl\n";
 }
-

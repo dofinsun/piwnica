@@ -1,16 +1,72 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta charset="utf-8">
-  <title>Game Management</title>
+<style>
+.rectangle {
+  fill: Gainsboro;
+  stroke-width: 5;
+  stroke: Black ;
+}
+
+.walline {
+  stroke: Black;
+  stroke-width: 5;
+}
+
+.doorline {
+  stroke: DarkCyan;
+  stroke-width: 5;
+}
+
+.simafore {
+  stroke: Black;
+  stroke-width: 1;
+  fill: OrangeRed;
+}
+
+</style>
 </head>
 <body>
-	<iframe height="500px" width="700px" src="outdex2.pl" name="iframe_a" ></iframe>
-	<select name="RU_01">
-    <option value="name" selected>RU_01</option>
-    <option value="a">a</option>
-    <option value="b">b</option>
-    <option value="c">c</option>
-  </select>
+
+<svg width="750" height="410">
+  <rect class="rectangle" x="2" y="2" width="740" height="400"/>
+
+  <line x1="0" y1="100" x2="75" y2="100" class="walline"/>
+  <line x1="0" y1="250" x2="25" y2="250" class="walline"/>
+  <line x1="75" y1="250" x2="225" y2="250" class="walline"/>
+  <line x1="125" y1="250" x2="125" y2="400" class="walline"/>
+  <line x1="125" y1="100" x2="500" y2="100" class="walline"/>
+  <line x1="225" y1="100" x2="225" y2="175" class="walline"/>
+  <line x1="225" y1="225" x2="225" y2="300" class="walline"/>
+  <line x1="225" y1="350" x2="225" y2="400" class="walline"/>
+  <line x1="425" y1="100" x2="425" y2="325" class="walline"/>
+  <line x1="425" y1="375" x2="425" y2="400" class="walline"/>
+  <line x1="425" y1="275" x2="475" y2="275" class="walline"/>
+  <line x1="475" y1="275" x2="475" y2="325" class="walline"/>
+  <line x1="475" y1="375" x2="475" y2="400" class="walline"/>
+  <line x1="550" y1="100" x2="625" y2="100" class="walline"/>
+  <line x1="625" y1="0" x2="625" y2="200" class="walline"/>
+  <line x1="625" y1="300" x2="625" y2="400" class="walline"/>
+  <line x1="625" y1="200" x2="740" y2="200" class="walline"/>
+  <line x1="625" y1="300" x2="740" y2="300" class="walline"/>
+
+  <line id="d12" x1="25" y1="250" x2="75" y2="250" class="doorline"/>
+
+  <circle id="sima0" cx="6" cy="350" r="5" class="simafore"/>
+  <circle id="sima1" cx="75" cy="250" r="5" class="simafore"/>
+  <circle id="sima2" cx="225" cy="225" r="5" class="simafore"/>
+  <circle id="sima3" cx="425" cy="375" r="5" class="simafore"/>
+  <circle id="sima4" cx="475" cy="375" r="5" class="simafore"/>
+
+</svg>
+
+<button type="button"
+onclick="document.getElementById('sima1').style.fill = 'ForestGreen'">On</button>
+<button type="button"
+onclick="document.getElementById('d12').setAttribute('y2',300);">open</button>
+
+
+</body>
+
 </body>
 </html>
