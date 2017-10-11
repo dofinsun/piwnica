@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="refresh" content="30">
+  <meta charset="utf-8">
+  <title>video surveillance system</title>
+  <link href="http://piwnica/jquery-ui/jquery-ui.css" rel="stylesheet">
+</head>
+<body>
+<!-- Accordion -->
+<h2 class="demoHeaders">Accordion</h2>
+<div id="accordion">
+    <h3>First</h3>
+    <div><a href="./page_01.html">Video 1</a><br></div>
+    <h3>Second</h3>
+    <div><a href="./page_02.html">Video 2</a><br></div>
+    <h3>Third</h3>
+    <div><a href="./page_03.html">Video 3</a><br></div>
+    <h3>Third_2</h3>
+    <div>
+      <video id="video" width="800" height="450">
+        <source src="/video/video_03.mp4">
+        Your browser does not support the video tag.
+      </video><br>
+    </div>
+</div>
+
+<script src="http://piwnica/jquery-ui/external/jquery/jquery.js"></script>
+<script src="http://piwnica/jquery-ui/jquery-ui.js"></script>
+<script>
+  $( "#accordion" ).accordion({
+      heightStyle: "content"
+    });
+
+  var video = document.getElementById('video');
+  video.addEventListener('click',function(){
+    video.play();
+  },false);
+</script>
+</body>
+</html>
+
