@@ -17,7 +17,7 @@ const uint8_t openz[] = {
   B00111111, //O
   B01110011, //P
   B01111001, //E
-  B01010100, //N
+  B00110111, //N
 };
 
 TM1637Display display(CLK, DIO);
