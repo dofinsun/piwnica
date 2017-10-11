@@ -3,9 +3,43 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Management page</title>
+	<link rel="stylesheet" type="text/css" href="scripts/itsmystyle.css">
 	<script type="text/javascript" src="scripts/md5.js"></script>
 </head>
 <body>
+	<div id="plan">
+		<svg width="750" height="410">
+		  <rect class="rectangle" x="2" y="2" width="740" height="400"/>
+
+		  <line x1="0" y1="100" x2="75" y2="100" class="walline"/>
+		  <line x1="0" y1="250" x2="25" y2="250" class="walline"/>
+		  <line x1="75" y1="250" x2="225" y2="250" class="walline"/>
+		  <line x1="125" y1="250" x2="125" y2="400" class="walline"/>
+		  <line x1="125" y1="100" x2="500" y2="100" class="walline"/>
+		  <line x1="225" y1="100" x2="225" y2="175" class="walline"/>
+		  <line x1="225" y1="225" x2="225" y2="300" class="walline"/>
+		  <line x1="225" y1="350" x2="225" y2="400" class="walline"/>
+		  <line x1="425" y1="100" x2="425" y2="325" class="walline"/>
+		  <line x1="425" y1="375" x2="425" y2="400" class="walline"/>
+		  <line x1="425" y1="275" x2="475" y2="275" class="walline"/>
+		  <line x1="475" y1="275" x2="475" y2="325" class="walline"/>
+		  <line x1="475" y1="375" x2="475" y2="400" class="walline"/>
+		  <line x1="550" y1="100" x2="625" y2="100" class="walline"/>
+		  <line x1="625" y1="0" x2="625" y2="200" class="walline"/>
+		  <line x1="625" y1="300" x2="625" y2="400" class="walline"/>
+		  <line x1="625" y1="200" x2="740" y2="200" class="walline"/>
+		  <line x1="625" y1="300" x2="740" y2="300" class="walline"/>
+
+		  <line id="d12" x1="25" y1="250" x2="75" y2="250" class="doorline"/>
+
+		  <circle id="sima0" cx="6" cy="350" r="5" class="simafore"/>
+		  <circle id="sima1" cx="75" cy="250" r="5" class="simafore"/>
+		  <circle id="sima2" cx="225" cy="225" r="5" class="simafore"/>
+		  <circle id="sima3" cx="425" cy="375" r="5" class="simafore"/>
+		  <circle id="sima4" cx="475" cy="375" r="5" class="simafore"/>
+
+		</svg>
+	</div>
 	<div id="firstpage">
 		<input type="password" id="GameStartPassword">
 		<select id="Players" required>
@@ -16,22 +50,29 @@
 		</select>
 		<button type="Button" id="StartButton" onclick="GameStart()">Start</button>
 	</div>
+	<br>
+	<div id="secondpage"></div>
 	<p id="demo"></p>
 
 <script>
+	var firstpagedata = "<p id='currentstep'></p><p id='reaction'></p><br>\
+	<button type='Button' id='nextStepButton' onclick='loadDoc(\"scripts/put_sig.pl?FNS=1\", dummy)'>NextStep</button>&nbsp&nbsp&nbsp;\
+	<button type='Button' id='exitTheGame' onclick='loadDoc(\"scripts/put_sig.pl?FNS=2\", dummy)'>HappyEnd</button>";
 
 	function myTimer() {
 		var d = new Date();
 		var t = d.toLocaleTimeString();
 		document.getElementById("demo").innerHTML = t;
-		loadDoc("scripts/get_gamestat.pl", myFunction);
+		loadDoc("scripts/get_currentstep.pl", fillRemoteControll);
+		loadDoc("scripts/get_gamestat.pl", fillTableData);
 	}
 
 	function GameStart() {
 		if (md5(document.getElementById("GameStartPassword").value) === "d8578edf8458ce06fbc5bb76a58c5ca4") {
 			document.getElementById("StartButton").disabled = true;
 			document.getElementById("demo").innerHTML = "Ok";
-			loadDoc("scripts/starthegame.pl?Players=" + document.getElementById("Players").value, myFunction);
+			loadDoc("scripts/starthegame.pl?Players=" + document.getElementById("Players").value, dummy);
+			document.getElementById("firstpage").innerHTML = firstpagedata;
 			var myVar = setInterval(myTimer, 5000);
 		} else {
 			window.alert("Wrong password!!!");
@@ -49,12 +90,12 @@
 	  jsonhttp.send();
 	}
 
-	function myFunction(jsonhttp) {
+	function fillTableData(jsonhttp) {
 		var txt = "";
 		var tab;
 		var row;
-		var rightorder = { RuStat:"", GameStat:"", SensorStat:""}
-		document.getElementById("firstpage").innerHTML = "Get from DB: <br>";
+		var rightorder = { SensorStat:"", GameStat:"", RuStat:""}
+		document.getElementById("secondpage").innerHTML = "Variables status: <br>";
 		var myObjData = JSON.parse(jsonhttp.responseText);
 		for (tab in rightorder) {
 			myObjData[tab].sort(function(a, b){
@@ -64,14 +105,25 @@
 			        if (x > y) {return 1;}
 			        return 0;
 						});
-			txt = "<table><tr><th>Param</th><th>Value</th></tr>";
+			txt = "<table class='SomeTable'><tr><th>Param</th><th>Value</th></tr>";
 			for (row in myObjData[tab]){
 				txt += "<tr><td>" + myObjData[tab][row].Param + "</td><td>" + myObjData[tab][row].Value + "</td></tr>";
 			}
-			document.getElementById("firstpage").innerHTML += txt;
-			document.getElementById("firstpage").innerHTML += "</table>";
+			document.getElementById("secondpage").innerHTML += txt;
+			document.getElementById("secondpage").innerHTML += "</table>";
 		}
 	}
+
+	function fillRemoteControll(jsonhttp) {
+		var txt = "";
+		var myObjData = JSON.parse(jsonhttp.responseText);
+		document.getElementById("currentstep").innerHTML = "Game Step: " + myObjData.currentstep;
+		document.getElementById("reaction").innerHTML = "2do actions:<br> " + myObjData.reaction;
+	}
+
+	function dummy(jsonhttp) {
+	}
+
 </script>
 </body>
 </html>
