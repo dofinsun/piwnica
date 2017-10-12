@@ -14,10 +14,15 @@
 		  stroke-width: 5;
 		}
 
+		.windowline{
+		  stroke: #0D47A1;;
+		  stroke-width: 5;
+		}
+
 		.simafore {
 		  stroke: Black;
 		  stroke-width: 1;
-		  fill: OrangeRed;
+		  fill: DarkOrange;
 		}
 
 		#plan {

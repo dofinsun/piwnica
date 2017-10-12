@@ -137,7 +137,7 @@ void loop() {
             client.println(UID_value);
             client.print("DD1=");
             client.println(DD1_status);
-            client.print("DD2=");
+            client.print("DD12=");
             client.println(DD2_status);
             client.print("PIR1=");
             client.println(PIR1_status);

@@ -20,7 +20,7 @@ void loop() {
         switch (client.read()) {
           case 's':               //reply with status
             client.println("DD1=Open");
-            client.println("DD2=Open");
+            client.println("DD12=Open");
             client.println("DD23=Open");
             client.println("DD34a=Open");
             client.println("DD34b=Open");

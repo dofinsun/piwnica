@@ -21,7 +21,18 @@
 .simafore {
   stroke: Black;
   stroke-width: 1;
+}
+
+.simaforeOff {
+  stroke: Black;
+  stroke-width: 1;
   fill: OrangeRed;
+}
+
+.simaforeOn {
+  stroke: Black;
+  stroke-width: 1;
+  fill: ForestGreen;
 }
 
 </style>
@@ -50,23 +61,74 @@
   <line x1="625" y1="200" x2="740" y2="200" class="walline"/>
   <line x1="625" y1="300" x2="740" y2="300" class="walline"/>
 
-  <line id="d12" x1="25" y1="250" x2="75" y2="250" class="doorline"/>
+  <line id="DD12" x1="25" y1="250" x2="75" y2="250" class="doorline"/>
 
-  <circle id="sima0" cx="6" cy="350" r="5" class="simafore"/>
-  <circle id="sima1" cx="75" cy="250" r="5" class="simafore"/>
-  <circle id="sima2" cx="225" cy="225" r="5" class="simafore"/>
-  <circle id="sima3" cx="425" cy="375" r="5" class="simafore"/>
-  <circle id="sima4" cx="475" cy="375" r="5" class="simafore"/>
+  <circle id="DL1" cx="6" cy="350" r="5" class="simafore"/>
+  <circle id="DL12" cx="75" cy="250" r="5" class="simafore"/>
+  <circle id="DL23" cx="225" cy="225" r="5" class="simafore"/>
+  <circle id="DL34a" cx="425" cy="375" r="5" class="simafore"/>
+  <circle id="DL34b" cx="475" cy="375" r="5" class="simafore"/>
+  <circle id="DLdpk" cx="225" cy="300" r="5" class="simafore"/>
 
 </svg>
+<p id="demo"></p>
+<button type="button" onclick="drawPlan();">Simafore On</button>
+<button type="button" onclick="openDoor();">Door Open</button>
+<script>
+var jsonStrinIn = "{\"RuStat\":[{\"Param\":\"RU_01\",\"Value\":\"Up\"},{\"Value\":\"Up\",\"Param\":\"RU_02\"},{\"Value\":\"Up\",\"Param\":\"RU_03\"},{\"Value\":\"Up\",\"Param\":\"RU_04\"},{\"Value\":\"Up\",\"Param\":\"RU_05\"},{\"Value\":\"Up\",\"Param\":\"RU_06\"}],\"SensorStat\":[{\"Param\":\"RfId\",\"Value\":\"e024efc7\"},{\"Param\":\"DD12\",\"Value\":\"Open\"},{\"Param\":\"DD2\",\"Value\":\"Open\"},{\"Param\":\"PIR1\",\"Value\":\"Clear\"},{\"Value\":\"Clear\",\"Param\":\"PIR2\"},{\"Value\":\"Close\",\"Param\":\"USB\"},{\"Param\":\"DD23\",\"Value\":\"Open\"},{\"Param\":\"DDdpk\",\"Value\":\"Open\"},{\"Value\":\"Clear\",\"Param\":\"PIR3\"},{\"Value\":\"Clear\",\"Param\":\"PIR4\"},{\"Value\":\"Close\",\"Param\":\"JACK\"},{\"Param\":\"KEY\",\"Value\":\"Close\"},{\"Param\":\"DD34a\",\"Value\":\"Open\"},{\"Value\":\"Open\",\"Param\":\"DD34b\"},{\"Value\":\"Empty\",\"Param\":\"UZ0\"},{\"Value\":\"Open\",\"Param\":\"DDT\"},{\"Value\":\"0\",\"Param\":\"KEY0\"},{\"Param\":\"KEY1\",\"Value\":\"0\"},{\"Param\":\"KEY2\",\"Value\":\"0\"},{\"Param\":\"KEY3\",\"Value\":\"0\"},{\"Value\":\"Open\",\"Param\":\"Grate\"},{\"Param\":\"PIR5\",\"Value\":\"Clear\"},{\"Param\":\"TOUCHr\",\"Value\":\"Empty\"},{\"Value\":\"Empty\",\"Param\":\"TOUCHl\"},{\"Value\":\"e024efc1\",\"Param\":\"NFC1\"},{\"Value\":\"e024efc2\",\"Param\":\"NFC2\"},{\"Value\":\"e024efc3\",\"Param\":\"NFC3\"},{\"Value\":\"Clear\",\"Param\":\"PIR6\"},{\"Param\":\"WIRE\",\"Value\":\"Cut\"},{\"Value\":\"e024efc4\",\"Param\":\"NFC4\"},{\"Param\":\"NFC5\",\"Value\":\"e024efc5\"},{\"Value\":\"e024efc6\",\"Param\":\"NFC6\"}],\"GameStat\":[{\"Param\":\"GameLevel\",\"Value\":\"0\"},{\"Value\":\"Stop\",\"Param\":\"GameStat\"},{\"Param\":\"DL1\",\"Value\":\"Open\"},{\"Value\":\"Close\",\"Param\":\"DL12\"},{\"Value\":\"Open\",\"Param\":\"DL23\"},{\"Value\":\"Close\",\"Param\":\"DLdpk\"},{\"Param\":\"DL34a\",\"Value\":\"Open\"},{\"Value\":\"Open\",\"Param\":\"DL34b\"},{\"Value\":\"Open\",\"Param\":\"DLW\"},{\"Value\":\"Open\",\"Param\":\"DLT\"},{\"Param\":\"ForceNextLevel\",\"Value\":\"0\"},{\"Value\":\"3\",\"Param\":\"Players\"}]}";
+var simafores = {DL1:"0",DL12:"1",DL23:"2",DL34a:"3",DL34b:"4", DLdpk:"5"};
+var doorsnum = {DD1:"0", DD12:"1", DD23:"2", DD34a:"3", DD34b:"4", DDdpk:"5", DDT:"6", Grate:"7"};
+var myObjData = JSON.parse(jsonStrinIn);
+var theDoors;
+myObjData.GameStat.sort(function(a, b){
+        var x = a.Param.toLowerCase();
+        var y = b.Param.toLowerCase();
+        if (x < y) {return -1;}
+        if (x > y) {return 1;}
+        return 0;
+      });
+myObjData.RuStat.sort(function(a, b){
+        var x = a.Param.toLowerCase();
+        var y = b.Param.toLowerCase();
+        if (x < y) {return -1;}
+        if (x > y) {return 1;}
+        return 0;
+      });
+myObjData.SensorStat.sort(function(a, b){
+        var x = a.Param.toLowerCase();
+        var y = b.Param.toLowerCase();
+        if (x < y) {return -1;}
+        if (x > y) {return 1;}
+        return 0;
+      });
+function drawPlan() {
+  for ( var i in simafores) {
+    if (myObjData.GameStat[simafores[i]].Value == "Close" ) {
+      document.getElementById(i).style.fill = "OrangeRed";
+    } else {
+      document.getElementById(i).style.fill = "ForestGreen";
+    }
+  }
+  document.getElementById("demo").innerHTML += "hello\n"
+}
 
-<button type="button"
-onclick="document.getElementById('sima1').style.fill = 'ForestGreen'">On</button>
-<button type="button"
-onclick="document.getElementById('d12').setAttribute('y2',300);">open</button>
-
+function openDoor() {
+  // var x = document.getElementById('d12');
+  // x.setAttribute("x2","10");
+  // x.setAttribute("y2","300");
+  theDoors = document.getElementById("DD12");
+  document.getElementById("demo").innerHTML += theDoors;
+  document.getElementById("demo").innerHTML += myObjData.SensorStat[doorsnum.DD12].Param + myObjData.SensorStat[doorsnum.DD12].Value;
+  // if (myObjData.GameStat[doorsnum.DD12].Value == "Close") {
+  //   x.setAttribute('x2',75);
+  //   x.setAttribute('y2',250);
+  // } else if (myObjData.GameStat[doorsnum.DD12].Value == "Open") {
+  //   x.setAttribute('x2',10);
+  //   x.setAttribute('y2',300);
+  // }
+}
+</script>
 
 </body>
 
-</body>
 </html>

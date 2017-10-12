@@ -19,7 +19,8 @@
 		  <line x1="225" y1="100" x2="225" y2="175" class="walline"/>
 		  <line x1="225" y1="225" x2="225" y2="300" class="walline"/>
 		  <line x1="225" y1="350" x2="225" y2="400" class="walline"/>
-		  <line x1="425" y1="100" x2="425" y2="325" class="walline"/>
+		  <line x1="425" y1="100" x2="425" y2="150" class="walline"/>
+			<line x1="425" y1="225" x2="425" y2="325" class="walline"/>
 		  <line x1="425" y1="375" x2="425" y2="400" class="walline"/>
 		  <line x1="425" y1="275" x2="475" y2="275" class="walline"/>
 		  <line x1="475" y1="275" x2="475" y2="325" class="walline"/>
@@ -30,13 +31,18 @@
 		  <line x1="625" y1="200" x2="740" y2="200" class="walline"/>
 		  <line x1="625" y1="300" x2="740" y2="300" class="walline"/>
 
-		  <line id="d12" x1="25" y1="250" x2="75" y2="250" class="doorline"/>
+		  <line id="DD12" x1="25" y1="250" x2="75" y2="250" class="doorline"/>
 
-		  <circle id="sima0" cx="6" cy="350" r="5" class="simafore"/>
-		  <circle id="sima1" cx="75" cy="250" r="5" class="simafore"/>
-		  <circle id="sima2" cx="225" cy="225" r="5" class="simafore"/>
-		  <circle id="sima3" cx="425" cy="375" r="5" class="simafore"/>
-		  <circle id="sima4" cx="475" cy="375" r="5" class="simafore"/>
+			<line id="DLW" x1="425" y1="150" x2="425" y2="225" class="windowline"/>
+
+		  <circle id="DL1" cx="6" cy="350" r="5" class="simafore"/>
+		  <circle id="DL12" cx="75" cy="250" r="5" class="simafore"/>
+		  <circle id="DL23" cx="225" cy="225" r="5" class="simafore"/>
+		  <circle id="DL34a" cx="425" cy="375" r="5" class="simafore"/>
+		  <circle id="DL34b" cx="475" cy="375" r="5" class="simafore"/>
+			<circle id="DLdpk" cx="225" cy="300" r="5" class="simafore"/>
+
+
 
 		</svg>
 	</div>
@@ -58,6 +64,7 @@
 	var firstpagedata = "<p id='currentstep'></p><p id='reaction'></p><br>\
 	<button type='Button' id='nextStepButton' onclick='loadDoc(\"scripts/put_sig.pl?FNS=1\", dummy)'>NextStep</button>&nbsp&nbsp&nbsp;\
 	<button type='Button' id='exitTheGame' onclick='loadDoc(\"scripts/put_sig.pl?FNS=2\", dummy)'>HappyEnd</button>";
+	var myObjData;
 
 	function myTimer() {
 		var d = new Date();
@@ -65,6 +72,7 @@
 		document.getElementById("demo").innerHTML = t;
 		loadDoc("scripts/get_currentstep.pl", fillRemoteControll);
 		loadDoc("scripts/get_gamestat.pl", fillTableData);
+		drawPlan();
 	}
 
 	function GameStart() {
@@ -94,9 +102,10 @@
 		var txt = "";
 		var tab;
 		var row;
-		var rightorder = { SensorStat:"", GameStat:"", RuStat:""}
+		var rightorder = { SensorStat:"", GameStat:"", RuStat:""};
+
 		document.getElementById("secondpage").innerHTML = "Variables status: <br>";
-		var myObjData = JSON.parse(jsonhttp.responseText);
+		myObjData = JSON.parse(jsonhttp.responseText);
 		for (tab in rightorder) {
 			myObjData[tab].sort(function(a, b){
 			        var x = a.Param.toLowerCase();
@@ -116,9 +125,33 @@
 
 	function fillRemoteControll(jsonhttp) {
 		var txt = "";
-		var myObjData = JSON.parse(jsonhttp.responseText);
-		document.getElementById("currentstep").innerHTML = "Game Step: " + myObjData.currentstep;
-		document.getElementById("reaction").innerHTML = "2do actions:<br> " + myObjData.reaction;
+		var myObjHint = JSON.parse(jsonhttp.responseText);
+		document.getElementById("currentstep").innerHTML = "Game Step: " + myObjHint.currentstep;
+		document.getElementById("reaction").innerHTML = "2do actions:<br> " + myObjHint.reaction;
+	}
+
+	function drawPlan() {
+		var simafores = {DL1:"0",DL12:"1",DL23:"2",DL34a:"3",DL34b:"4", DLdpk:"5"};
+		var doorsnum = {DD1:"0", DD12:"1", DD23:"2", DD34a:"3", DD34b:"4", DDdpk:"5", DDT:"6", Grate:"7"};
+		var theDoors;
+		for ( var i in simafores) {
+	    if (myObjData.GameStat[simafores[i]].Value == "Close" ) {
+	      document.getElementById(i).style.fill = "OrangeRed";
+	    } else if (myObjData.GameStat[simafores[i]].Value == "Open" ) {
+	      document.getElementById(i).style.fill = "ForestGreen";
+	    }
+	  }
+		theDoors = document.getElementById("DD12");
+		if (myObjData.SensorStat[doorsnum.DD12].Value == "Close") {
+			theDoors.setAttribute('x2',75);
+			theDoors.setAttribute('y2',250);
+		} else if (myObjData.SensorStat[doorsnum.DD12].Value == "Open") {
+			theDoors.setAttribute('x2',10);
+			theDoors.setAttribute('y2',300);
+		}
+
+
+
 	}
 
 	function dummy(jsonhttp) {
