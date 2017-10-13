@@ -1,4 +1,4 @@
-  // Arduino Micro!!!!
+  // Arduino Nano!!!!
   #include <Wire.h>
   #include <SPI.h>
   #include <PN532_SPI.h>

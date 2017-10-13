@@ -32,6 +32,11 @@
 		  <line x1="625" y1="300" x2="740" y2="300" class="walline"/>
 
 		  <line id="DD12" x1="25" y1="250" x2="75" y2="250" class="doorline"/>
+			<line id="DD23" x1="225" y1="175" x2="225" y2="225" class="doorline"/>
+			<line id="DD34a" x1="425" y1="325" x2="425" y2="375" class="doorline"/>
+			<line id="DD34b" x1="475" y1="325" x2="475" y2="375" class="doorline"/>
+			<line id="DDdpk" x1="225" y1="300" x2="225" y2="350" class="doorline"/>
+			<line id="Grate" x1="619" y1="200" x2="619" y2="300" class="doorline"/>
 
 			<line id="DLW" x1="425" y1="150" x2="425" y2="225" class="windowline"/>
 
@@ -132,7 +137,7 @@
 
 	function drawPlan() {
 		var simafores = {DL1:"0",DL12:"1",DL23:"2",DL34a:"3",DL34b:"4", DLdpk:"5"};
-		var doorsnum = {DD1:"0", DD12:"1", DD23:"2", DD34a:"3", DD34b:"4", DDdpk:"5", DDT:"6", Grate:"7"};
+		var doorsnum = {DD1:"0", DD12:"1", DD23:"2", DD34a:"3", DD34b:"4", DDdpk:"5", Grate:"7"};
 		var theDoors;
 		for ( var i in simafores) {
 	    if (myObjData.GameStat[simafores[i]].Value == "Close" ) {
@@ -149,8 +154,54 @@
 			theDoors.setAttribute('x2',10);
 			theDoors.setAttribute('y2',300);
 		}
-
-
+		theDoors = document.getElementById("DD23");
+		if (myObjData.SensorStat[doorsnum.DD23].Value == "Close") {
+			theDoors.setAttribute('x2',225);
+			theDoors.setAttribute('y2',225);
+		} else if (myObjData.SensorStat[doorsnum.DD23].Value == "Open") {
+			theDoors.setAttribute('x2',175);
+			theDoors.setAttribute('y2',175);
+		}
+		theDoors = document.getElementById("DD34a");
+		if (myObjData.SensorStat[doorsnum.DD34a].Value == "Close") {
+			theDoors.setAttribute('x2',425);
+			theDoors.setAttribute('y2',375);
+		} else if (myObjData.SensorStat[doorsnum.DD34a].Value == "Open") {
+			theDoors.setAttribute('x2',375);
+			theDoors.setAttribute('y2',325);
+		}
+		theDoors = document.getElementById("DD34b");
+		if (myObjData.SensorStat[doorsnum.DD34b].Value == "Close") {
+			theDoors.setAttribute('x2',475);
+			theDoors.setAttribute('y2',375);
+		} else if (myObjData.SensorStat[doorsnum.DD34b].Value == "Open") {
+			theDoors.setAttribute('x2',525);
+			theDoors.setAttribute('y2',325);
+		}
+		theDoors = document.getElementById("DDdpk");
+		if (myObjData.SensorStat[doorsnum.DDdpk].Value == "Close") {
+			theDoors.setAttribute('x1',225);
+			theDoors.setAttribute('y1',300);
+			theDoors.setAttribute('x2',225);
+			theDoors.setAttribute('y2',350);
+		} else if (myObjData.SensorStat[doorsnum.DDdpk].Value == "Open") {
+			theDoors.setAttribute('x1',218);
+			theDoors.setAttribute('y1',340);
+			theDoors.setAttribute('x2',218);
+			theDoors.setAttribute('y2',390);
+		}
+		theDoors = document.getElementById("Grate");
+		if (myObjData.SensorStat[doorsnum.Grate].Value == "Close") {
+			theDoors.setAttribute('x1',619);
+			theDoors.setAttribute('y1',200);
+			theDoors.setAttribute('x2',619);
+			theDoors.setAttribute('y2',300);
+		} else if (myObjData.SensorStat[doorsnum.Grate].Value == "Open") {
+			theDoors.setAttribute('x1',619);
+			theDoors.setAttribute('y1',290);
+			theDoors.setAttribute('x2',619);
+			theDoors.setAttribute('y2',390);
+		}
 
 	}
 
