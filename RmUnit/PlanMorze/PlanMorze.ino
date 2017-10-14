@@ -32,7 +32,7 @@ void loop() {
     delay(WaitDel);
   }
   int i;
-  int myDelay[] = {50, 200, 50, 350, 100, 50, 20};
+  int myDelay[] = {50, 200, 50, 250, 100, 50, 20};
   for(i = 0; i <=5; i++) {
     digitalWrite(LED1, LOW);
     digitalWrite(LED2, LOW);
@@ -53,14 +53,9 @@ void loop() {
     analogWrite(LED3, i);
     analogWrite(LED4, i);
     analogWrite(LEDgreen, i);
-    delay(50);
+    delay(10);
     }
-  while(!digitalRead(Button)) {
-    delay(WaitDel);
-  }
-  while(digitalRead(Button)) {
-    delay(WaitDel);
-  }
+  delay(1000);
   digitalWrite(LED1, HIGH);
   delay(500);
   digitalWrite(LED2, HIGH);
@@ -68,7 +63,6 @@ void loop() {
   digitalWrite(LED3, HIGH);
   delay(500);
   digitalWrite(LED4, HIGH);
-  delay(500);
   digitalWrite(LEDgreen, HIGH);
   delay(500);
   for(i = 0; i <=5; i++) {
@@ -80,12 +74,17 @@ void loop() {
   digitalWrite(LEDgreen, LOW);
   delay(500);
   digitalWrite(LEDred, HIGH);
-  delay(6000);
+  delay(2000);
+   for(i = 255; i >= 0; i=i-5) {
+    analogWrite(LEDred, i);
+    delay(10);
+   }
+  digitalWrite(LEDred, LOW);
+  delay(2000);
   int myPass[] = {3, 5, 2, 7};
-  int morzeDelay1 = 600;
-  int morzeDelay2 = 1800;
+  int morzeDelay1 = 400;
+  int morzeDelay2 = morzeDelay1 * 3;
   int morzeDelay3 = 6000;
-  while(1){
     for(char x=0; x<=3; x++) {
       for(char y=myPass[x]; y>0; y--) {
         digitalWrite(LEDred, HIGH);
@@ -96,5 +95,5 @@ void loop() {
       delay(morzeDelay2);
     }
     delay(morzeDelay3);
-  }
+    digitalWrite(LEDgreen, HIGH);
 }
