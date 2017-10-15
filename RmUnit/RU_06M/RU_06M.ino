@@ -3,13 +3,15 @@
 #include <Ethernet.h>
 
 const byte ERR_pin = 13;
-String PIR6_status, Wire_cut;
+String PIR6_status, DDp1_status, DDp2_status, Wire_cut;
 String NFC_UID[3] = {"", "", ""};
 String NFC_REP[3] = {"NFC4=", "NFC5=", "NFC6="};
 unsigned long prev_time = 0;
 unsigned long curr_time = 0;
 unsigned long delta_time = 0;
 const byte PIR6_pin = 12;
+const byte DDp1_pin = 6;
+const byte DDp2_pin = 7;
 const byte DLp1_pin = A0;
 const byte DLp2_pin = A1;
 const byte DLven_pin = A2;
@@ -31,6 +33,8 @@ void setup() {
   digitalWrite(ERR_pin, LOW);
 
   pinMode(PIR6_pin, INPUT);
+  pinMode(DDp1_pin, INPUT_PULLUP);
+  pinMode(DDp1_pin, INPUT_PULLUP);
   pinMode(DLp1_pin, OUTPUT);
   pinMode(DLp2_pin, OUTPUT);
   pinMode(DLven_pin, OUTPUT);
@@ -83,6 +87,22 @@ void loop() {
   } else {
     PIR6_status = "Clear";
   }
+  
+  //Read grate p1 status
+  drum = digitalRead(DDp1_pin);
+  if (drum) {
+    DDp1_status = "Open";
+  } else {
+    DDp1_status = "Close";
+  }
+
+  //Read grate p2 status
+  drum = digitalRead(DDp2_pin);
+  if (drum) {
+    DDp2_status = "Open";
+  } else {
+    DDp2_status = "Close";
+  }
 
   //Check wire status
   boolean wire_stat = true;
@@ -116,6 +136,10 @@ void loop() {
             client.println("");
             client.print("PIR6=");
             client.println(PIR6_status);
+            client.print("DDp1=");
+            client.println(DDp1_status);
+            client.print("DDp2=");
+            client.println(DDp2_status);
             client.print("WIRE=");
             client.println(Wire_cut);
             for (byte i = 0; i < 3; i++) {

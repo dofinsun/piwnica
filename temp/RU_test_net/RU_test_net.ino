@@ -26,6 +26,8 @@ void loop() {
             client.println("DD34b=Open");
             client.println("DDT=Open");
             client.println("DDdpk=Open");
+            client.println("DDp1=Open");
+            client.println("DDp2=Open");
             client.println("Grate=Open");
             client.println("JACK=Close");
             client.println("KEY=Close");

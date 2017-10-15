@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <script type="text/javascript" src="../scripts/md5.js"></script>
 <style>
 .rectangle {
   fill: Gainsboro;
@@ -74,6 +75,7 @@
 <p id="demo"></p>
 <button type="button" onclick="drawPlan();">Simafore On</button>
 <button type="button" onclick="openDoor();">Door Open</button>
+<input type="password" id="GameStartPassword">
 <script>
 var jsonStrinIn = "{\"RuStat\":[{\"Param\":\"RU_01\",\"Value\":\"Up\"},{\"Value\":\"Up\",\"Param\":\"RU_02\"},{\"Value\":\"Up\",\"Param\":\"RU_03\"},{\"Value\":\"Up\",\"Param\":\"RU_04\"},{\"Value\":\"Up\",\"Param\":\"RU_05\"},{\"Value\":\"Up\",\"Param\":\"RU_06\"}],\"SensorStat\":[{\"Param\":\"RfId\",\"Value\":\"e024efc7\"},{\"Param\":\"DD12\",\"Value\":\"Open\"},{\"Param\":\"DD2\",\"Value\":\"Open\"},{\"Param\":\"PIR1\",\"Value\":\"Clear\"},{\"Value\":\"Clear\",\"Param\":\"PIR2\"},{\"Value\":\"Close\",\"Param\":\"USB\"},{\"Param\":\"DD23\",\"Value\":\"Open\"},{\"Param\":\"DDdpk\",\"Value\":\"Open\"},{\"Value\":\"Clear\",\"Param\":\"PIR3\"},{\"Value\":\"Clear\",\"Param\":\"PIR4\"},{\"Value\":\"Close\",\"Param\":\"JACK\"},{\"Param\":\"KEY\",\"Value\":\"Close\"},{\"Param\":\"DD34a\",\"Value\":\"Open\"},{\"Value\":\"Open\",\"Param\":\"DD34b\"},{\"Value\":\"Empty\",\"Param\":\"UZ0\"},{\"Value\":\"Open\",\"Param\":\"DDT\"},{\"Value\":\"0\",\"Param\":\"KEY0\"},{\"Param\":\"KEY1\",\"Value\":\"0\"},{\"Param\":\"KEY2\",\"Value\":\"0\"},{\"Param\":\"KEY3\",\"Value\":\"0\"},{\"Value\":\"Open\",\"Param\":\"Grate\"},{\"Param\":\"PIR5\",\"Value\":\"Clear\"},{\"Param\":\"TOUCHr\",\"Value\":\"Empty\"},{\"Value\":\"Empty\",\"Param\":\"TOUCHl\"},{\"Value\":\"e024efc1\",\"Param\":\"NFC1\"},{\"Value\":\"e024efc2\",\"Param\":\"NFC2\"},{\"Value\":\"e024efc3\",\"Param\":\"NFC3\"},{\"Value\":\"Clear\",\"Param\":\"PIR6\"},{\"Param\":\"WIRE\",\"Value\":\"Cut\"},{\"Value\":\"e024efc4\",\"Param\":\"NFC4\"},{\"Param\":\"NFC5\",\"Value\":\"e024efc5\"},{\"Value\":\"e024efc6\",\"Param\":\"NFC6\"}],\"GameStat\":[{\"Param\":\"GameLevel\",\"Value\":\"0\"},{\"Value\":\"Stop\",\"Param\":\"GameStat\"},{\"Param\":\"DL1\",\"Value\":\"Open\"},{\"Value\":\"Close\",\"Param\":\"DL12\"},{\"Value\":\"Open\",\"Param\":\"DL23\"},{\"Value\":\"Close\",\"Param\":\"DLdpk\"},{\"Param\":\"DL34a\",\"Value\":\"Open\"},{\"Value\":\"Open\",\"Param\":\"DL34b\"},{\"Value\":\"Open\",\"Param\":\"DLW\"},{\"Value\":\"Open\",\"Param\":\"DLT\"},{\"Param\":\"ForceNextLevel\",\"Value\":\"0\"},{\"Value\":\"3\",\"Param\":\"Players\"}]}";
 var simafores = {DL1:"0",DL12:"1",DL23:"2",DL34a:"3",DL34b:"4", DLdpk:"5"};
@@ -109,7 +111,8 @@ function drawPlan() {
       document.getElementById(i).style.fill = "ForestGreen";
     }
   }
-  document.getElementById("demo").innerHTML += "hello\n"
+  document.getElementById("demo").innerHTML += "hello ";
+  document.getElementById("demo").innerHTML += md5(document.getElementById("GameStartPassword").value);
 }
 
 function openDoor() {
