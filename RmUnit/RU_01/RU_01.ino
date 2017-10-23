@@ -133,7 +133,7 @@ void loop() {
         switch (client.read()) {
           case 's':               //reply with status
             client.println("");
-            client.print("RfId=");
+            client.print("NFC0=");
             client.println(UID_value);
             client.print("DD1=");
             client.println(DD1_status);
@@ -147,22 +147,22 @@ void loop() {
             client.println(USB_status);
             UID_value = "";
             break;
-          case 'q':               //unlock D1
+          case 'q':               //unlock DL1
             digitalWrite(GR1_pin, HIGH);
             digitalWrite(RED1_pin, LOW);
             digitalWrite(DL1_pin, LOW);
             break;
-          case 'w':               //lock D1
+          case 'w':               //lock DL1
             digitalWrite(GR1_pin, LOW);
             digitalWrite(RED1_pin, HIGH);
             digitalWrite(DL1_pin, HIGH);
             break;
-          case 'e':               //unlock D12
+          case 'e':               //unlock DL12
             digitalWrite(GR12_pin, HIGH);
             digitalWrite(RED12_pin, LOW);
             digitalWrite(DL12_pin, LOW);
             break;
-          case 'r':               //lock D12
+          case 'r':               //lock DL12
             digitalWrite(GR12_pin, LOW);
             digitalWrite(RED12_pin, HIGH);
             digitalWrite(DL12_pin, HIGH);

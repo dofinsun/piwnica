@@ -1,4 +1,4 @@
-String DDT_status;
+String DDT_status,KEY0_status,KEY1_status,KEY2_status,KEY3_status;
 int DLW_pin = A4;
 int DLT_pin = A5;
 int DDT_pin = A3;
@@ -70,7 +70,27 @@ void loop() {
       digitalWrite(GREEN_LED_pin[thisPin], LOW);
       digitalWrite(RED_LED_pin[thisPin], LOW);
     }
+  }
 
+  if (patch_count[0]) {
+    KEY0_status = "Open";
+  } else {
+    KEY0_status = "Close";
+  }
+  if (patch_count[1]) {
+    KEY1_status = "Open";
+  } else {
+    KEY1_status = "Close";
+  }
+  if (patch_count[2]) {
+    KEY2_status = "Open";
+  } else {
+    KEY2_status = "Close";
+  }
+  if (patch_count[3]) {
+    KEY3_status = "Open";
+  } else {
+    KEY3_status = "Close";
   }
   
   EthernetClient client = server.available();
@@ -82,13 +102,13 @@ void loop() {
             client.print("DDT=");
             client.println(DDT_status);
             client.print("KEY0=");
-            client.println(patch_count[0]);
+            client.println(KEY0_status);
             client.print("KEY1=");
-            client.println(patch_count[1]);
+            client.println(KEY1_status);
             client.print("KEY2=");
-            client.println(patch_count[2]);
+            client.println(KEY2_status);
             client.print("KEY3=");
-            client.println(patch_count[3]);
+            client.println(KEY3_status);
             break;
           case 'q':               //unlock DLW
             digitalWrite(DLW_pin, LOW);

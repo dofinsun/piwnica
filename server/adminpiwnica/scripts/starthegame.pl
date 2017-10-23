@@ -31,6 +31,7 @@ if (defined($pid)) {
 #Child
     unless (fork) {
 #GrandChild
+      close STDOUT;
       exec("./thegame.pl $FORM{Players}") or die "Unable to start thegame.pl script";
       exit 0;
     }

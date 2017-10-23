@@ -47,6 +47,7 @@
 		  <circle id="DL34a" cx="425" cy="375" r="5" class="simafore"/>
 		  <circle id="DL34b" cx="475" cy="375" r="5" class="simafore"/>
 			<circle id="DLdpk" cx="225" cy="300" r="5" class="simafore"/>
+			<circle id="DLGrate" cx="625" cy="200" r="5" class="simafore"/>
 			<circle id="DLL" cx="550" cy="394" r="5" class="simafore"/>
 			<circle id="DLL0" cx="400" cy="10" r="5" class="simafore"/>
 			<circle id="DLL1" cx="410" cy="10" r="5" class="simafore"/>
@@ -67,6 +68,7 @@
 		  <option value="6">6 players</option>
 		</select>
 		<button type="Button" id="StartButton" onclick="GameStart()">Start</button>
+		<button type="Button" onclick="loadDoc('scripts/servicemode.pl', dummy);">ServiceMode</button>
 	</div>
 	<br>
 	<div id="secondpage"></div>
@@ -93,7 +95,7 @@
 			document.getElementById("demo").innerHTML = "Ok";
 			loadDoc("scripts/starthegame.pl?Players=" + document.getElementById("Players").value, dummy);
 			document.getElementById("firstpage").innerHTML = firstpagedata;
-			var myVar = setInterval(myTimer, 5000);
+			var myVar = setInterval(myTimer, 1000);
 		} else {
 			window.alert("Wrong password!!!");
 		}
@@ -136,19 +138,17 @@
 	}
 
 	function fillRemoteControll(jsonhttp) {
-		var txt = "";
 		var myObjHint = JSON.parse(jsonhttp.responseText);
 		document.getElementById("currentstep").innerHTML = "Game Step: " + myObjHint.currentstep;
 		document.getElementById("reaction").innerHTML = "2do actions:<br> " + myObjHint.reaction;
 	}
 
 	function drawPlan() {
-		var simafores = {"DL1":0,"DL12":1,"DL23":2,"DL34a":3,"DL34b":4,"DLdpk":5,"DLL":6,"DLL0":7,"DLL1":8,"DLL2":9,
-		"DLp1":10,"DLp2":11,"DLS":12,"DLT":13,"DLven":14};
-		var sensors = {"DD1":0,"DD12":1,"DD23":2,"DD34a":3,"DD34b":4,"DDdpk":5,"DDp1":6,"DDp2":7,"DDT":8,"Grate":9,
-		"JACK":10,"KEY":11,"KEY0":12,"KEY1":13,"KEY2":14,"KEY3":15,"NFC1":16,"NFC2":17,"NFC3":18,"NFC4":19,"NFC5":20,
-		"NFC6":21,"PIR1":22,"PIR2":23,"PIR3":24,"PIR4":25,"PIR5":26,"PIR6":27,"RfId":28,"TOUCHl":29,"TOUCHr":30,
-		"USB":31,"UZ0":32,"WIRE":33};
+		var	simafores = {"DL1":0, "DL12":1, "DL23":2, "DL34a":3, "DL34b":4, "DLdpk":5, "DLGrate":6, "DLL":7,
+		            		"DLL0":8, "DLL1":9, "DLL2":10, "DLp1":11, "DLp2":12, "DLS":13, "DLT":14, "DLven":15};
+		var sensors = {"DD1":0, "DD12":1, "DD23":2, "DD34a":3, "DD34b":4, "DDdpk":5, "DDp1":6, "DDp2":7, "DDT":8, "Grate":9, "JACK":10,
+		"KEY":11, "KEY0":12, "KEY1":13, "KEY2":14, "KEY3":15, "NFC0":16, "NFC1":17, "NFC2":18, "NFC3":19, "NFC4":20, "NFC5":21, "NFC6":22,
+		"PIR1":23, "PIR2":24, "PIR3":25, "PIR4":26, "PIR5":27, "PIR6":28, "TOUCHl":29, "TOUCHr":30, "USB":31, "UZ0":32, "WIRE":33};
 		var theDoors;
 		//color simafores
 		for ( var i in simafores) {
