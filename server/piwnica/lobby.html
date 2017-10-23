@@ -13,8 +13,9 @@ body {
   <div id="firstpage"></div>
 <script>
 
-var myVar = setInterval(myTimer, 5000);
-var runOnceFlag = 1;
+var myVar = setInterval(myTimer, 1000);
+var runOnceFlag1 = 1;
+var runOnceFlag2 = 1;
 
 function myTimer() {
   loadDoc("http://adminpiwnica:8080/scripts/get_currentstep.pl", prepare_output);
@@ -33,25 +34,23 @@ function loadDoc(url, cFunction) {
 
 function prepare_output(jsonhttp) {
   var myObjHint = JSON.parse(jsonhttp.responseText);
-  if (myObjHint.currentstep == "1") {
-    if (runOnceFlag) {
+  if (myObjHint.currentstep == "2") {
+    if (runOnceFlag1) {
       document.getElementById("firstpage").innerHTML = "<video autoplay onended='continueRefresh()'><source src='/video/video_01.mp4' type='video/mp4'></video>";
       clearInterval(myVar);
-      runOnceFlag = 0;
+      runOnceFlag1 = 0;
     }
   } else if (myObjHint.currentstep == "3") {
-    if (runOnceFlag) {
+    if (runOnceFlag2) {
       document.getElementById("firstpage").innerHTML = "<img src='http://piwnica:9090/?action=stream'>";
       clearInterval(myVar);
-      runOnceFlag = 0;
+      runOnceFlag2 = 0;
     }
-  } else {
-    runOnceFlag = 1;
   }
 }
 
 function continueRefresh() {
-  myVar = setInterval(myTimer, 5000);
+  myVar = setInterval(myTimer, 1000);
   document.getElementById("firstpage").innerHTML = "";
 }
 
