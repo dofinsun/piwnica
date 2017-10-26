@@ -3,26 +3,26 @@
 PN532_HSU pn532hsu(Serial1);
 PN532 nfc(pn532hsu);
 String UID_value, DD1_status, DD2_status, PIR1_status, PIR2_status, USB_status;
-int ERR_pin = 13;
-int DD1_pin = 11; //define pin numbers
-int DD2_pin = 12;
-int PIR1_pin = 4;
-int PIR2_pin = 5;
-int USB_in_pin = 6;
-int USB_out_pin = 7;
-int RED1_pin = A0;
-int RED12_pin = A2;
-int GR1_pin = A1;
-int GR12_pin = A3;
-int DL1_pin = A4;
-int DL12_pin = A5;
+const byte ERR_pin = 13;
+const byte DD1_pin = 11; //define pin numbers
+const byte DD2_pin = 12;
+const byte PIR1_pin = 4;
+const byte PIR2_pin = 5;
+const byte USB_in_pin = 6;
+const byte USB_out_pin = 7;
+const byte RED1_pin = A0;
+const byte RED12_pin = A2;
+const byte GR1_pin = A1;
+const byte GR12_pin = A3;
+const byte DL1_pin = A4;
+const byte DL12_pin = A5;
 
 #include <SPI.h>
 #include <Ethernet.h>
-byte mac[] = {0xD0, 0xF1, 0xC0, 0xA8, 0x02, 0x02};
-IPAddress ip(192, 168, 2, 2);
-IPAddress myDns(192, 168, 2, 1);
-IPAddress gateway(192, 168, 2, 1);
+byte mac[] = {0xD0, 0xF1, 0xC0, 0xA8, 0x02, 0x01};
+IPAddress ip(192, 168, 2, 1);
+IPAddress myDns(192, 168, 2, 10);
+IPAddress gateway(192, 168, 2, 10);
 IPAddress subnet(255, 255, 255, 0);
 EthernetServer server = EthernetServer(404);
 
@@ -46,8 +46,8 @@ void setup() {
   digitalWrite(GR12_pin, HIGH);
   pinMode(DL1_pin, OUTPUT);       //Door locks
   pinMode(DL12_pin, OUTPUT);
-  digitalWrite(DL1_pin, LOW);
-  digitalWrite(DL12_pin, LOW);
+  digitalWrite(DL1_pin, HIGH);
+  digitalWrite(DL12_pin, HIGH);
   
   nfc.begin();
   uint32_t versiondata = nfc.getFirmwareVersion();
@@ -150,22 +150,22 @@ void loop() {
           case 'q':               //unlock DL1
             digitalWrite(GR1_pin, HIGH);
             digitalWrite(RED1_pin, LOW);
-            digitalWrite(DL1_pin, LOW);
+            digitalWrite(DL1_pin, HIGH);
             break;
           case 'w':               //lock DL1
             digitalWrite(GR1_pin, LOW);
             digitalWrite(RED1_pin, HIGH);
-            digitalWrite(DL1_pin, HIGH);
+            digitalWrite(DL1_pin, LOW);
             break;
           case 'e':               //unlock DL12
             digitalWrite(GR12_pin, HIGH);
             digitalWrite(RED12_pin, LOW);
-            digitalWrite(DL12_pin, LOW);
+            digitalWrite(DL12_pin, HIGH);
             break;
           case 'r':               //lock DL12
             digitalWrite(GR12_pin, LOW);
             digitalWrite(RED12_pin, HIGH);
-            digitalWrite(DL12_pin, HIGH);
+            digitalWrite(DL12_pin, LOW);
             break;
         }
      }

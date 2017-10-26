@@ -21,10 +21,10 @@ const byte DDo_pin = 9;
 const byte Mon_pin = 11;
 const byte Mdir_pin = 12;
 
-byte mac[] = {0xD0, 0xF1, 0xC0, 0xA8, 0x02, 0x06};
-IPAddress ip(192, 168, 2, 6);
-IPAddress myDns(192, 168, 2, 1);
-IPAddress gateway(192, 168, 2, 1);
+byte mac[] = {0xD0, 0xF1, 0xC0, 0xA8, 0x02, 0x05};
+IPAddress ip(192, 168, 2, 5);
+IPAddress myDns(192, 168, 2, 10);
+IPAddress gateway(192, 168, 2, 10);
 IPAddress subnet(255, 255, 255, 0);
 EthernetServer server = EthernetServer(404);
 
@@ -39,8 +39,8 @@ void setup() {
   pinMode(TPLedl_pin, OUTPUT);
   pinMode(DLL_pin, OUTPUT);
   pinMode(DLS_pin, OUTPUT);
-  digitalWrite(DLL_pin, LOW);
-  digitalWrite(DLS_pin, LOW);
+  digitalWrite(DLL_pin, HIGH);
+  digitalWrite(DLS_pin, HIGH);
   pinMode(DDc_pin, INPUT_PULLUP);
   pinMode(DDo_pin, INPUT_PULLUP);
   pinMode(Mon_pin, OUTPUT);
@@ -133,16 +133,16 @@ void loop() {
             }
             break;
           case 'q':               //unlock DLL
-            digitalWrite(DLL_pin, LOW);
-            break;
-          case 'w':               //lock DLL
             digitalWrite(DLL_pin, HIGH);
             break;
+          case 'w':               //lock DLL
+            digitalWrite(DLL_pin, LOW);
+            break;
           case 'e':               //unlock DLS
-            digitalWrite(DLS_pin, LOW);
+            digitalWrite(DLS_pin, HIGH);
             break;
           case 'r':               //lock DLS
-            digitalWrite(DLS_pin, HIGH);
+            digitalWrite(DLS_pin, LOW);
             break;
           case 'a':               //Open Grate
             ACT = 1;
