@@ -23,6 +23,7 @@ String KEY0_status = "Close";
 String KEY1_status = "Close";
 String KEY2_status = "Close";
 String KEY3_status = "Close";
+String KEYBOX_status = "Close";
 String NFC0_status = "e024efc0";
 String NFC1_status = "e024efc1";
 String NFC2_status = "e024efc2";
@@ -36,8 +37,10 @@ String PIR3_status = "Clear";
 String PIR4_status = "Clear";
 String PIR5_status = "Clear";
 String PIR6_status = "Clear";
+String PowerCable_status = "Close";
 String TOUCHl_status = "Empty";
 String TOUCHr_status = "Empty";
+String TruncButton_status = "Close";
 String USB_status = "Close";
 String UZ0_status = "Empty";
 String WIRE_status = "Cut";
@@ -104,6 +107,9 @@ void loop() {
           if (incomingString.startsWith("KEY3=") && (incomingString.length() > 6)) {
             KEY3_status = incomingString.substring(5);
           }
+          if (incomingString.startsWith("KEYBOX=") && (incomingString.length() > 8)) {
+            KEYBOX_status = incomingString.substring(7);
+          }
           if (incomingString.startsWith("NFC0=") && (incomingString.length() > 6)) {
             NFC0_status = incomingString.substring(5);
           }
@@ -143,11 +149,17 @@ void loop() {
           if (incomingString.startsWith("PIR6=") && (incomingString.length() > 6)) {
             PIR6_status = incomingString.substring(5);
           }
+          if (incomingString.startsWith("PowerCable=") && (incomingString.length() > 12)) {
+            PowerCable_status = incomingString.substring(11);
+          }
           if (incomingString.startsWith("TOUCHl=") && (incomingString.length() > 8)) {
             TOUCHl_status = incomingString.substring(7);
           }
           if (incomingString.startsWith("TOUCHr=") && (incomingString.length() > 8)) {
             TOUCHr_status = incomingString.substring(7);
+          }
+          if (incomingString.startsWith("TruncButton=") && (incomingString.length() > 13)) {
+            TruncButton_status = incomingString.substring(12);
           }
           if (incomingString.startsWith("USB=") && (incomingString.length() > 5)) {
             USB_status = incomingString.substring(4);
@@ -194,6 +206,8 @@ void loop() {
           client.println(KEY2_status);
           client.print("KEY3=");
           client.println(KEY3_status);
+          client.print("KEYBOX=");
+          client.println(KEYBOX_status);
           client.print("NFC0=");
           client.println(NFC0_status);
           client.print("NFC1=");
@@ -220,10 +234,14 @@ void loop() {
           client.println(PIR5_status);
           client.print("PIR6=");
           client.println(PIR6_status);
+          client.print("PowerCable=");
+          client.println(PowerCable_status);
           client.print("TOUCHl=");
           client.println(TOUCHl_status);
           client.print("TOUCHr=");
           client.println(TOUCHr_status);
+          client.print("TruncButton=");
+          client.println(TruncButton_status);
           client.print("USB=");
           client.println(USB_status);
           client.print("UZ0=");

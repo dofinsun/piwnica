@@ -38,10 +38,10 @@ my %RuSenVal = load_val_dbi('SensorName', 'SensorStatus', 'RmUnitStatus');	#Remo
 my %GameStatus = load_val_dbi('Param', 'Value', 'GameStat');			#Game status values
 
 my %RU_orders = ("RU_01" => {"status", "s", "DL1_unlock", "q", "DL1_lock", "w", "DL12_unlock", "e", "DL12_lock", "r"},
-"RU_02" => {"status", "s", "DL23_unlock", "q", "DL23_lock", "w", "DLdpk_unlock", "e", "DLdpk_lock", "r"},
-"RU_03" => {"status", "s", "DL34a_unlock", "q", "DL34a_lock", "w", "DL34b_unlock", "e", "DL34b_lock", "r"},
+"RU_02" => {"status", "s", "DL23_unlock", "q", "DL23_lock", "w", "DLdpk_unlock", "e", "DLdpk_lock", "r", "DLLightAlarm_unlock", "t", "DLLightAlarm_lock", "y"},
+"RU_03" => {"status", "s", "DL34a_unlock", "q", "DL34a_lock", "w", "DL34b_unlock", "e", "DL34b_lock", "r", "DLComBox_unlock", "t", "DLComBox_lock", "y", "DLTruncLed_on", "a", "DLTruncLed_off", "d"},
 "RU_04" => {"status", "s", "DLW_unlock", "q", "DLW_lock", "w", "DLT_unlock", "e", "DLT_lock", "r", "key_decrase", "a", "key_reset", "d"},
-"RU_05" => {"status", "s", "DLL_unlock", "q", "DLL_lock", "w", "DLS_unlock", "e", "DLS_lock", "r", "DLGrate_open", "a", "DLGrate_close", "d"},
+"RU_05" => {"status", "s", "DLL_unlock", "q", "DLL_lock", "w", "DLS_unlock", "e", "DLS_lock", "r", "Grate_open", "a", "Grate_close", "d"},
 "RU_06" => {"status", "s", "DLp1_unlock", "q", "DLp1_lock", "w", "DLp2_unlock", "e", "DLp2_lock", "r", "DLven_unlock", "t",
 "DLven_lock", "y", "DLL0_unlock", "u", "DLL0_lock", "i", "DLL1_unlock", "a", "DLL1_lock", "d", "DLL2_unlock", "f", "DLL2_lock", "g"});
 

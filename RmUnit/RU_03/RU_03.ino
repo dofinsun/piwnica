@@ -135,10 +135,10 @@ void loop() {
             digitalWrite(RED34b_pin, HIGH);
             digitalWrite(DL34b_pin, LOW);
             break;
-          case 't':               //unlock DLcomBox
+          case 't':               //unlock DLComBox
             digitalWrite(DLcomBox_pin, HIGH);
             break;
-          case 'y':               //lock DLcomBox
+          case 'y':               //lock DLComBox
             digitalWrite(DLcomBox_pin, LOW);
             break;
           case 'a':               //on TruncLed

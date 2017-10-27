@@ -57,6 +57,9 @@
 			<circle id="DLS" cx="560" cy="394" r="5" class="simafore"/>
 			<circle id="DLT" cx="375" cy="150" r="5" class="simafore"/>
 			<circle id="DLven" cx="15" cy="50" r="5" class="simafore"/>
+			<circle id="DLComBox" cx="417" cy="250" r="5" class="simafore"/>
+			<circle id="DLLightAlarm" cx="200" cy="242" r="5" class="simafore"/>
+			<circle id="DLTruncLed" cx="400" cy="394" r="5" class="simafore"/>
 		</svg>
 	</div>
 	<div id="firstpage">
@@ -67,7 +70,7 @@
 		  <option value="5">5 players</option>
 		  <option value="6">6 players</option>
 		</select>
-		<button type="Button" id="StartButton" onclick="GameStart()">Start</button>&nbsp;&nbsp;&nbsp;
+		<button type="Button" id="StartButton" onclick="GameStart()">Start</button><br>&nbsp;&nbsp;&nbsp;
 		<button type="Button" onclick="loadDoc('scripts/servicemode.pl', dummy);">ServiceMode</button>
 	</div>
 	<br>
@@ -144,11 +147,13 @@
 	}
 
 	function drawPlan() {
-		var	simafores = {"DL1":0, "DL12":1, "DL23":2, "DL34a":3, "DL34b":4, "DLdpk":5, "DLGrate":6, "DLL":7,
-		            		"DLL0":8, "DLL1":9, "DLL2":10, "DLp1":11, "DLp2":12, "DLS":13, "DLT":14, "DLven":15};
-		var sensors = {"DD1":0, "DD12":1, "DD23":2, "DD34a":3, "DD34b":4, "DDdpk":5, "DDp1":6, "DDp2":7, "DDT":8, "Grate":9, "JACK":10,
-		"KEY":11, "KEY0":12, "KEY1":13, "KEY2":14, "KEY3":15, "NFC0":16, "NFC1":17, "NFC2":18, "NFC3":19, "NFC4":20, "NFC5":21, "NFC6":22,
-		"PIR1":23, "PIR2":24, "PIR3":25, "PIR4":26, "PIR5":27, "PIR6":28, "TOUCHl":29, "TOUCHr":30, "USB":31, "UZ0":32, "WIRE":33};
+		var	simafores = {"DL1":0,"DL12":1,"DL23":2,"DL34a":3,"DL34b":4,"DLComBox":5,"DLdpk":6,"DLGrate":7,"DLL":8,"DLL0":9,
+		"DLL1":10,"DLL2":11,"DLLightAlarm":12,"DLp1":13,"DLp2":14,"DLS":15,"DLT":16,"DLTruncLed":17,"DLven":18};
+
+		var sensors = {"DD1":0,"DD12":1,"DD23":2,"DD34a":3,"DD34b":4,"DDdpk":5,"DDp1":6,"DDp2":7,"DDT":8,"Grate":9,"JACK":10,"KEY":11,
+		"KEY0":12,"KEY1":13,"KEY2":14,"KEY3":15,"KEYBOX":16,"NFC0":17,"NFC1":18,"NFC2":19,"NFC3":20,"NFC4":21,"NFC5":22,"NFC6":23,"PIR1":24,
+		"PIR2":25,"PIR3":26,"PIR4":27,"PIR5":28,"PIR6":29,"PowerCable":30,"TOUCHl":31,"TOUCHr":32,"TruncButton":33,"USB":34,"UZ0":35,"WIRE":36};
+
 		var theDoors;
 		//color simafores
 		for ( var i in simafores) {
@@ -158,9 +163,9 @@
 	      document.getElementById(i).style.fill = "ForestGreen";
 	    }
 	  }
-		if (myObjData.GameStat[15].Value == "Close" ) {
+		if (myObjData.GameStat[19].Value == "Close" ) {
 			document.getElementById("DLW").style.stroke = "DarkBlue";
-		} else if (myObjData.GameStat[15].Value == "Open" ) {
+		} else if (myObjData.GameStat[19].Value == "Open" ) {
 			document.getElementById("DLW").style.stroke = "SkyBlue";
 		}
 
