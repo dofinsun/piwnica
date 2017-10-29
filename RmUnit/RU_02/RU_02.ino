@@ -15,8 +15,6 @@ const byte DDdpk_pin = 11;
 const byte DD23_pin = 12;
 const byte ERR_pin = 13;
 
-//const byte LED_pin[3] = { 0, 1, 2 };
-
 #include <SPI.h>
 #include <Ethernet.h>
 byte mac[] = {0xD0, 0xF1, 0xC0, 0xA8, 0x02, 0x02};
