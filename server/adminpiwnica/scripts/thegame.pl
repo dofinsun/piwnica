@@ -70,27 +70,69 @@ until ($GameStep == $LastGameStep) {
 # Game logic
 	switch ($GameStep) {
 		case 0		{ print "$GameStep step\n" if $debug;}
-		case 1		{ print "$GameStep step\n" if $debug;
-								print "DD1=$RuSenVal{DD1}\n" if $debug;
+		case 1		{ print "DD1=$RuSenVal{DD1}\n" if $debug;
 								if ($RuSenVal{DD1} eq "Close") {
-									GameLevel_1();
+									print "Run GameLevel_1 subrutime.\n" if $debug;
+									tell_order($RuIps{RU_01}, $RU_orders{RU_01}->{DL1_lock});
+									set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DL1');
+									$GameStep++;
+									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
 								}
 							}
-		case 2		{ print "$GameStep step\n" if $debug;
-								print "USB=$RuSenVal{USB}\n" if $debug;
+		case 2		{ print "USB=$RuSenVal{USB}\n" if $debug;
 								if ($RuSenVal{USB} eq "Open"){
-									GameLevel_2();
+									print "Run GameLevel_2 subrutime.\n" if $debug;
+									tell_order($RuIps{RU_01}, $RU_orders{RU_01}->{DL12_unlock});
+									set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DL12');
+									$GameStep++;
+									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
 								}
 							}
-		case 3		{ print "$GameStep step\n" if $debug;
-								if ($RuSenVal{JACK} eq "Open"){
-									GameLevel_3();
+		case 3		{ print "KEYBOX=$RuSenVal{KEYBOX}\n" if $debug;
+								if ($RuSenVal{KEYBOX} eq "Open"){
+									print "Run GameLevel_3 subrutime.\n" if $debug;
+									tell_order($RuIps{RU_02}, $RU_orders{RU_02}->{DLLightAlarm_unlock});
+									set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLLightAlarm');
+									$GameStep++;
+									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
 								}
 							}
+		case 4		{ print "PowerCable=$RuSenVal{PowerCable}\n" if $debug;
+								if ($RuSenVal{PowerCable} eq "Open"){
+									print "Run GameLevel_4 subrutime.\n" if $debug;
+									tell_order($RuIps{RU_02}, $RU_orders{RU_02}->{DLLightAlarm_lock});
+									set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DLLightAlarm');
+									$GameStep++;
+									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+								}
+							}
+		case 5		{
+
+							}
+		case 6		{
+
+							}
+		case 7		{
+
+							}
+		case 8		{
+
+							}
+		case 9		{
+
+							}
+		case 10		{
+
+							}
+		case 11		{
+
+							}
+
 		else			{	print "Current step is $GameStep \n" if $debug;
 								$GameStep = $LastGameStep;
 							}
 	}
+	print "$GameStep step\n" if $debug;
 	sleep 1;
 }
 set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
@@ -223,24 +265,4 @@ sub prepare_room {
 	set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLGrate');
 	tell_order($RuIps{RU_01}, $RU_orders{RU_01}->{DL1_unlock});
 	set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DL1');
-}
-
-sub GameLevel_1 {
-	print "Run GameLevel_1 subrutime.\n" if $debug;
-	tell_order($RuIps{RU_01}, $RU_orders{RU_01}->{DL1_lock});
-	set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DL1');
-	$GameStep++;
-	set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
-}
-
-sub GameLevel_2 {
-	print "Run GameLevel_2 subrutime.\n" if $debug;
-	tell_order($RuIps{RU_01}, $RU_orders{RU_01}->{DL12_unlock});
-	set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DL12');
-	$GameStep++;
-	set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
-}
-
-sub GameLevel_3 {
-
 }
