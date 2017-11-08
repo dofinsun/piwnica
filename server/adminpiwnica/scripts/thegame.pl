@@ -29,7 +29,7 @@ my $dbh = DBI->connect("DBI:SQLite:dbname=pigame.db",
 set_val_dbi('GameStat', 'Value', $Players, 'Param', 'Players');
 
 my $GameStep = 0;
-my $LastGameStep = 4;
+my $LastGameStep = 11;
 my $ForceNextLevel = 0;
 
 my %RuIps = load_val_dbi('RuName', 'RuIp', 'RmUnits');						#RemoteUnit IP`s
