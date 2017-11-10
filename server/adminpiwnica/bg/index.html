@@ -1,72 +1,64 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<style>
-.rectangle {
-  fill: Gainsboro;
-  stroke-width: 5;
-  stroke: Black ;
+  <meta charset="utf-8">
+  <title>video system</title>
+  <style>
+body {
+    /*background-color: black;
+    color: black;*/
 }
-
-.walline {
-  stroke: Black;
-  stroke-width: 5;
+button {
+  /*background-color: black;
+  color: LimeGreen;*/
 }
-
-.doorline {
-  stroke: DarkCyan;
-  stroke-width: 5;
+#firstpage {
+  float: left;
+  width: 250px;
+  height: 100%;
+  /*background-color: LightBlue;*/
 }
-
-.simafore {
-  stroke: Black;
-  stroke-width: 1;
-  fill: OrangeRed;
+#secondpage {
+  /*background-color: Lavender;*/
 }
-
 </style>
 </head>
 <body>
+  <div id="firstpage">
+<form name="numPad">
+<table cellpadding="2" cellspacing="2" border="0">
+<tr>
+     <td colspan="3" align="center"><input type="text" name="quantity" size="20"></td>
+</tr>
+<tr>
+     <td><input type="button" value="1" style="font-size:25px;" onclick = "document.numPad.quantity.value =document.numPad.quantity.value+ this.value"></td>
+     <td><input type="Button" value="2" style="font-size:25px;" onclick = "document.numPad.quantity.value =document.numPad.quantity.value+ this.value"></td>
+     <td><input type="Button" value="3" style="font-size:25px;" onclick = "document.numPad.quantity.value =document.numPad.quantity.value+ this.value"></td>
+</tr>
+<tr>
+     <td><input type="Button" value="4" style="font-size:25px;" onclick = "document.numPad.quantity.value =document.numPad.quantity.value+ this.value"></td>
+     <td><input type="Button" value="5" style="font-size:25px;" onclick = "document.numPad.quantity.value =document.numPad.quantity.value+ this.value"></td>
+     <td><input type="Button" value="6" style="font-size:25px;" onclick = "document.numPad.quantity.value =document.numPad.quantity.value+ this.value"></td>
+</tr>
+<tr>
+     <td><input type="Button" value="7" style="font-size:25px;" onclick = "document.numPad.quantity.value =document.numPad.quantity.value+ this.value"></td>
+     <td><input type="Button" value="8" style="font-size:25px;" onclick = "document.numPad.quantity.value =document.numPad.quantity.value+ this.value"></td>
+     <td><input type="Button" value="9" style="font-size:25px;" onclick = "document.numPad.quantity.value =document.numPad.quantity.value+ this.value"></td>
+</tr>
+<tr>
+     <td><input type="Button" value="C" style="font-size:25px;" onclick = "document.numPad.quantity.value = ''"></td>
+     <td><input type="Button" value="0" style="font-size:25px;" onclick = "document.numPad.quantity.value =document.numPad.quantity.value+ this.value"></td>
+     <td><input type="Button" value="OK" style="font-size:25px;"></td>
+</tr>
+</table>
+</form></div>
+  <div id="secondpage"></div>
+<script>
 
-<svg width="750" height="410">
-  <rect class="rectangle" x="2" y="2" width="740" height="400"/>
-
-  <line x1="0" y1="100" x2="75" y2="100" class="walline"/>
-  <line x1="0" y1="250" x2="25" y2="250" class="walline"/>
-  <line x1="75" y1="250" x2="225" y2="250" class="walline"/>
-  <line x1="125" y1="250" x2="125" y2="400" class="walline"/>
-  <line x1="125" y1="100" x2="500" y2="100" class="walline"/>
-  <line x1="225" y1="100" x2="225" y2="175" class="walline"/>
-  <line x1="225" y1="225" x2="225" y2="300" class="walline"/>
-  <line x1="225" y1="350" x2="225" y2="400" class="walline"/>
-  <line x1="425" y1="100" x2="425" y2="325" class="walline"/>
-  <line x1="425" y1="375" x2="425" y2="400" class="walline"/>
-  <line x1="425" y1="275" x2="475" y2="275" class="walline"/>
-  <line x1="475" y1="275" x2="475" y2="325" class="walline"/>
-  <line x1="475" y1="375" x2="475" y2="400" class="walline"/>
-  <line x1="550" y1="100" x2="625" y2="100" class="walline"/>
-  <line x1="625" y1="0" x2="625" y2="200" class="walline"/>
-  <line x1="625" y1="300" x2="625" y2="400" class="walline"/>
-  <line x1="625" y1="200" x2="740" y2="200" class="walline"/>
-  <line x1="625" y1="300" x2="740" y2="300" class="walline"/>
-
-  <line id="d12" x1="25" y1="250" x2="75" y2="250" class="doorline"/>
-
-  <circle id="sima0" cx="6" cy="350" r="5" class="simafore"/>
-  <circle id="sima1" cx="75" cy="250" r="5" class="simafore"/>
-  <circle id="sima2" cx="225" cy="225" r="5" class="simafore"/>
-  <circle id="sima3" cx="425" cy="375" r="5" class="simafore"/>
-  <circle id="sima4" cx="475" cy="375" r="5" class="simafore"/>
-
-</svg>
-
-<button type="button"
-onclick="document.getElementById('sima1').style.fill = 'ForestGreen'">On</button>
-<button type="button"
-onclick="document.getElementById('d12').setAttribute('y2',300);">open</button>
+var runOnceFlag1 = 1;
 
 
-</body>
 
+</script>
 </body>
 </html>

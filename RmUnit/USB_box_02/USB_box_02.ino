@@ -1,9 +1,9 @@
 #include <TM1637Display.h>
-#define CLK 2
-#define DIO 3
-#define Button1 A4
-#define Led1 A5
-#define Key1 10
+#define CLK A4
+#define DIO A5
+#define Button1 10
+#define Led1 9
+#define Key1 8
 #define ShowDel 100
 #define WaitDel 200
 
@@ -17,7 +17,7 @@ const uint8_t openz[] = {
   B00111111, //O
   B01110011, //P
   B01111001, //E
-  B01010100, //N
+  B00110111, //N
 };
 
 TM1637Display display(CLK, DIO);
@@ -52,6 +52,7 @@ void loop() {
   }
   display.setSegments(openz);
   digitalWrite(Key1, HIGH);
+  digitalWrite(Led1, LOW);
   while(1);
 }
 

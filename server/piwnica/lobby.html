@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>video system</title>
+  <style>
+body {
+    background-color: black;
+}
+</style>
+</head>
+<body>
+  <div id="firstpage"></div>
+<script>
+
+var myVar = setInterval(myTimer, 1000);
+var runOnceFlag1 = 1;
+var runOnceFlag2 = 1;
+
+function myTimer() {
+  loadDoc("http://adminpiwnica:8080/scripts/get_currentstep.pl", prepare_output);
+}
+
+function loadDoc(url, cFunction) {
+  var jsonhttp=new XMLHttpRequest();
+  jsonhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      cFunction(this);
+    }
+  };
+  jsonhttp.open("GET", url, true);
+  jsonhttp.send();
+}
+
+function prepare_output(jsonhttp) {
+  var myObjHint = JSON.parse(jsonhttp.responseText);
+  if (myObjHint.currentstep == "2") {
+    if (runOnceFlag1) {
+      document.getElementById("firstpage").innerHTML = "<video autoplay onended='continueRefresh()'><source src='/video/video_01.mp4' type='video/mp4'></video>";
+      clearInterval(myVar);
+      runOnceFlag1 = 0;
+    }
+  } else if (myObjHint.currentstep == "3") {
+    if (runOnceFlag2) {
+      document.getElementById("firstpage").innerHTML = "<img src='http://piwnica:9090/?action=stream'>";
+      clearInterval(myVar);
+      runOnceFlag2 = 0;
+    }
+  }
+}
+
+function continueRefresh() {
+  myVar = setInterval(myTimer, 1000);
+  document.getElementById("firstpage").innerHTML = "";
+}
+
+</script>
+</body>
+</html>

@@ -3,9 +3,65 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Management page</title>
+	<link rel="stylesheet" type="text/css" href="scripts/itsmystyle.css">
 	<script type="text/javascript" src="scripts/md5.js"></script>
 </head>
 <body>
+	<div id="plan">
+		<svg width="750" height="410">
+		  <rect class="rectangle" x="2" y="2" width="740" height="400"/>
+		  <line x1="0" y1="100" x2="75" y2="100" class="walline"/>
+		  <line x1="0" y1="250" x2="25" y2="250" class="walline"/>
+		  <line x1="75" y1="250" x2="225" y2="250" class="walline"/>
+		  <line x1="125" y1="250" x2="125" y2="400" class="walline"/>
+		  <line x1="125" y1="100" x2="500" y2="100" class="walline"/>
+		  <line x1="225" y1="100" x2="225" y2="175" class="walline"/>
+		  <line x1="225" y1="225" x2="225" y2="300" class="walline"/>
+		  <line x1="225" y1="350" x2="225" y2="400" class="walline"/>
+		  <line x1="425" y1="100" x2="425" y2="150" class="walline"/>
+			<line x1="425" y1="225" x2="425" y2="325" class="walline"/>
+		  <line x1="425" y1="375" x2="425" y2="400" class="walline"/>
+		  <line x1="425" y1="275" x2="475" y2="275" class="walline"/>
+		  <line x1="475" y1="275" x2="475" y2="325" class="walline"/>
+		  <line x1="475" y1="375" x2="475" y2="400" class="walline"/>
+		  <line x1="550" y1="100" x2="625" y2="100" class="walline"/>
+		  <line x1="625" y1="0" x2="625" y2="200" class="walline"/>
+		  <line x1="625" y1="300" x2="625" y2="400" class="walline"/>
+		  <line x1="625" y1="200" x2="740" y2="200" class="walline"/>
+		  <line x1="625" y1="300" x2="740" y2="300" class="walline"/>
+
+		  <line id="DD12" x1="25" y1="250" x2="75" y2="250" class="doorline"/>
+			<line id="DD23" x1="225" y1="175" x2="225" y2="225" class="doorline"/>
+			<line id="DD34a" x1="425" y1="325" x2="425" y2="375" class="doorline"/>
+			<line id="DD34b" x1="475" y1="325" x2="475" y2="375" class="doorline"/>
+			<line id="DDdpk" x1="225" y1="300" x2="225" y2="350" class="doorline"/>
+			<line id="Grate" x1="619" y1="200" x2="619" y2="300" class="doorline"/>
+			<line id="DDp1" x1="500" y1="100" x2="550" y2="100" class="doorline"/>
+			<line id="DDp2" x1="75" y1="100" x2="125" y2="100" class="doorline"/>
+
+			<line id="DLW" x1="425" y1="150" x2="425" y2="225" class="windowline"/>
+
+		  <circle id="DL1" cx="6" cy="350" r="5" class="simafore"/>
+		  <circle id="DL12" cx="75" cy="250" r="5" class="simafore"/>
+		  <circle id="DL23" cx="225" cy="225" r="5" class="simafore"/>
+		  <circle id="DL34a" cx="425" cy="375" r="5" class="simafore"/>
+		  <circle id="DL34b" cx="475" cy="375" r="5" class="simafore"/>
+			<circle id="DLdpk" cx="225" cy="300" r="5" class="simafore"/>
+			<circle id="DLGrate" cx="625" cy="200" r="5" class="simafore"/>
+			<circle id="DLL" cx="550" cy="394" r="5" class="simafore"/>
+			<circle id="DLL0" cx="400" cy="10" r="5" class="simafore"/>
+			<circle id="DLL1" cx="410" cy="10" r="5" class="simafore"/>
+			<circle id="DLL2" cx="420" cy="10" r="5" class="simafore"/>
+			<circle id="DLp1" cx="500" cy="100" r="5" class="simafore"/>
+			<circle id="DLp2" cx="75" cy="100" r="5" class="simafore"/>
+			<circle id="DLS" cx="560" cy="394" r="5" class="simafore"/>
+			<circle id="DLT" cx="375" cy="150" r="5" class="simafore"/>
+			<circle id="DLven" cx="15" cy="50" r="5" class="simafore"/>
+			<circle id="DLComBox" cx="417" cy="250" r="5" class="simafore"/>
+			<circle id="DLLightAlarm" cx="200" cy="242" r="5" class="simafore"/>
+			<circle id="DLTruncLed" cx="400" cy="394" r="5" class="simafore"/>
+		</svg>
+	</div>
 	<div id="firstpage">
 		<input type="password" id="GameStartPassword">
 		<select id="Players" required>
@@ -14,25 +70,35 @@
 		  <option value="5">5 players</option>
 		  <option value="6">6 players</option>
 		</select>
-		<button type="Button" id="StartButton" onclick="GameStart()">Start</button>
+		<button type="Button" id="StartButton" onclick="GameStart()">Start</button><br>&nbsp;&nbsp;&nbsp;
+		<p><button type="Button" onclick="loadDoc('scripts/servicemode.pl', dummy);">ServiceMode</button></p>
 	</div>
+	<br>
+	<div id="secondpage"></div>
 	<p id="demo"></p>
 
 <script>
+	var firstpagedata = "<p id='currentstep'></p><p id='reaction'></p><br>\
+	<button type='Button' id='nextStepButton' onclick='loadDoc(\"scripts/put_sig.pl?FNS=1\", dummy)'>NextStep</button>&nbsp;&nbsp;&nbsp;\
+	<button type='Button' id='exitTheGame' onclick='loadDoc(\"scripts/put_sig.pl?FNS=2\", dummy)'>HappyEnd</button>";
+	var myObjData;
 
 	function myTimer() {
 		var d = new Date();
 		var t = d.toLocaleTimeString();
 		document.getElementById("demo").innerHTML = t;
-		loadDoc("scripts/get_gamestat.pl", myFunction);
+		loadDoc("scripts/get_currentstep.pl", fillRemoteControll);
+		loadDoc("scripts/get_gamestat.pl", fillTableData);
+		drawPlan();
 	}
 
 	function GameStart() {
-		if (md5(document.getElementById("GameStartPassword").value) === "d8578edf8458ce06fbc5bb76a58c5ca4") {
+		if (md5(document.getElementById("GameStartPassword").value) === "099b3b060154898840f0ebdfb46ec78f") {
 			document.getElementById("StartButton").disabled = true;
 			document.getElementById("demo").innerHTML = "Ok";
-			loadDoc("scripts/starthegame.pl?Players=" + document.getElementById("Players").value, myFunction);
-			var myVar = setInterval(myTimer, 5000);
+			loadDoc("scripts/starthegame.pl?Players=" + document.getElementById("Players").value, dummy);
+			document.getElementById("firstpage").innerHTML = firstpagedata;
+			var myVar = setInterval(myTimer, 1000);
 		} else {
 			window.alert("Wrong password!!!");
 		}
@@ -49,13 +115,14 @@
 	  jsonhttp.send();
 	}
 
-	function myFunction(jsonhttp) {
+	function fillTableData(jsonhttp) {
 		var txt = "";
 		var tab;
 		var row;
-		var rightorder = { RuStat:"", GameStat:"", SensorStat:""}
-		document.getElementById("firstpage").innerHTML = "Get from DB: <br>";
-		var myObjData = JSON.parse(jsonhttp.responseText);
+		var rightorder = { SensorStat:"", GameStat:"", RuStat:""};
+
+		document.getElementById("secondpage").innerHTML = "Variables status: <br>";
+		myObjData = JSON.parse(jsonhttp.responseText);
 		for (tab in rightorder) {
 			myObjData[tab].sort(function(a, b){
 			        var x = a.Param.toLowerCase();
@@ -64,14 +131,132 @@
 			        if (x > y) {return 1;}
 			        return 0;
 						});
-			txt = "<table><tr><th>Param</th><th>Value</th></tr>";
+			txt = "<table class='SomeTable'><tr><th>Param</th><th>Value</th></tr>";
 			for (row in myObjData[tab]){
 				txt += "<tr><td>" + myObjData[tab][row].Param + "</td><td>" + myObjData[tab][row].Value + "</td></tr>";
 			}
-			document.getElementById("firstpage").innerHTML += txt;
-			document.getElementById("firstpage").innerHTML += "</table>";
+			document.getElementById("secondpage").innerHTML += txt;
+			document.getElementById("secondpage").innerHTML += "</table>";
 		}
 	}
+
+	function fillRemoteControll(jsonhttp) {
+		var myObjHint = JSON.parse(jsonhttp.responseText);
+		document.getElementById("currentstep").innerHTML = "Game Step: " + myObjHint.currentstep;
+		document.getElementById("reaction").innerHTML = "2do actions:<br> " + myObjHint.reaction;
+	}
+
+	function drawPlan() {
+		var	simafores = {"DL1":0,"DL12":1,"DL23":2,"DL34a":3,"DL34b":4,"DLComBox":5,"DLdpk":6,"DLGrate":7,"DLL":8,"DLL0":9,
+		"DLL1":10,"DLL2":11,"DLLightAlarm":12,"DLp1":13,"DLp2":14,"DLS":15,"DLT":16,"DLTruncLed":17,"DLven":18};
+
+		var sensors = {"DD1":0,"DD12":1,"DD23":2,"DD34a":3,"DD34b":4,"DDdpk":5,"DDp1":6,"DDp2":7,"DDT":8,"Grate":9,"JACK":10,"KEY":11,
+		"KEY0":12,"KEY1":13,"KEY2":14,"KEY3":15,"KEYBOX":16,"NFC0":17,"NFC1":18,"NFC2":19,"NFC3":20,"NFC4":21,"NFC5":22,"NFC6":23,"PIR1":24,
+		"PIR2":25,"PIR3":26,"PIR4":27,"PIR5":28,"PIR6":29,"PowerCable":30,"TOUCHl":31,"TOUCHr":32,"TruncButton":33,"USB":34,"UZ0":35,"WIRE":36};
+
+		var theDoors;
+		//color simafores
+		for ( var i in simafores) {
+	    if (myObjData.GameStat[simafores[i]].Value == "Close" ) {
+	      document.getElementById(i).style.fill = "OrangeRed";
+	    } else if (myObjData.GameStat[simafores[i]].Value == "Open" ) {
+	      document.getElementById(i).style.fill = "ForestGreen";
+	    }
+	  }
+		if (myObjData.GameStat[19].Value == "Close" ) {
+			document.getElementById("DLW").style.stroke = "DarkBlue";
+		} else if (myObjData.GameStat[19].Value == "Open" ) {
+			document.getElementById("DLW").style.stroke = "SkyBlue";
+		}
+
+		//open or close doors and grates regarding information from sensors
+		theDoors = document.getElementById("DD12");
+		if (myObjData.SensorStat[sensors.DD12].Value == "Close") {
+			theDoors.setAttribute('x2',75);
+			theDoors.setAttribute('y2',250);
+		} else if (myObjData.SensorStat[sensors.DD12].Value == "Open") {
+			theDoors.setAttribute('x2',10);
+			theDoors.setAttribute('y2',300);
+		}
+		theDoors = document.getElementById("DD23");
+		if (myObjData.SensorStat[sensors.DD23].Value == "Close") {
+			theDoors.setAttribute('x2',225);
+			theDoors.setAttribute('y2',225);
+		} else if (myObjData.SensorStat[sensors.DD23].Value == "Open") {
+			theDoors.setAttribute('x2',175);
+			theDoors.setAttribute('y2',175);
+		}
+		theDoors = document.getElementById("DD34a");
+		if (myObjData.SensorStat[sensors.DD34a].Value == "Close") {
+			theDoors.setAttribute('x2',425);
+			theDoors.setAttribute('y2',375);
+		} else if (myObjData.SensorStat[sensors.DD34a].Value == "Open") {
+			theDoors.setAttribute('x2',375);
+			theDoors.setAttribute('y2',325);
+		}
+		theDoors = document.getElementById("DD34b");
+		if (myObjData.SensorStat[sensors.DD34b].Value == "Close") {
+			theDoors.setAttribute('x2',475);
+			theDoors.setAttribute('y2',375);
+		} else if (myObjData.SensorStat[sensors.DD34b].Value == "Open") {
+			theDoors.setAttribute('x2',525);
+			theDoors.setAttribute('y2',325);
+		}
+		theDoors = document.getElementById("DDdpk");
+		if (myObjData.SensorStat[sensors.DDdpk].Value == "Close") {
+			theDoors.setAttribute('x1',225);
+			theDoors.setAttribute('y1',300);
+			theDoors.setAttribute('x2',225);
+			theDoors.setAttribute('y2',350);
+		} else if (myObjData.SensorStat[sensors.DDdpk].Value == "Open") {
+			theDoors.setAttribute('x1',218);
+			theDoors.setAttribute('y1',340);
+			theDoors.setAttribute('x2',218);
+			theDoors.setAttribute('y2',390);
+		}
+		theDoors = document.getElementById("Grate");
+		if (myObjData.SensorStat[sensors.Grate].Value == "Close") {
+			theDoors.setAttribute('x1',619);
+			theDoors.setAttribute('y1',200);
+			theDoors.setAttribute('x2',619);
+			theDoors.setAttribute('y2',300);
+		} else if (myObjData.SensorStat[sensors.Grate].Value == "Open") {
+			theDoors.setAttribute('x1',619);
+			theDoors.setAttribute('y1',290);
+			theDoors.setAttribute('x2',619);
+			theDoors.setAttribute('y2',390);
+		}
+		theDoors = document.getElementById("DDp1");
+		if (myObjData.SensorStat[sensors.DDp1].Value == "Close") {
+			theDoors.setAttribute('x1',500);
+			theDoors.setAttribute('y1',100);
+			theDoors.setAttribute('x2',550);
+			theDoors.setAttribute('y2',100);
+		} else if (myObjData.SensorStat[sensors.DDp1].Value == "Open") {
+			theDoors.setAttribute('x1',500);
+			theDoors.setAttribute('y1',10);
+			theDoors.setAttribute('x2',550);
+			theDoors.setAttribute('y2',10);
+		}
+		theDoors = document.getElementById("DDp2");
+		if (myObjData.SensorStat[sensors.DDp1].Value == "Close") {
+			theDoors.setAttribute('x1',75);
+			theDoors.setAttribute('y1',100);
+			theDoors.setAttribute('x2',125);
+			theDoors.setAttribute('y2',100);
+		} else if (myObjData.SensorStat[sensors.DDp1].Value == "Open") {
+			theDoors.setAttribute('x1',75);
+			theDoors.setAttribute('y1',10);
+			theDoors.setAttribute('x2',125);
+			theDoors.setAttribute('y2',10);
+		}
+
+
+	}
+
+	function dummy(jsonhttp) {
+	}
+
 </script>
 </body>
 </html>

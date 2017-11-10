@@ -7,9 +7,10 @@ my $pid;
 print "$$ Parent\n";
 unless ($pid = fork) {
   print "$$ Child\n";
+  sleep 5;
   unless (fork) {
     print "$$ GrandChild\n";
-    sleep 5;
+    sleep 20;
     print "$$ GrandChild exiting\n";
     #die "We will die for a victory\n";
     exit 0;

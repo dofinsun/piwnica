@@ -1,42 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta http-equiv="refresh" content="30">
   <meta charset="utf-8">
-  <title>video surveillance system</title>
-  <link href="http://piwnica/jquery-ui/jquery-ui.css" rel="stylesheet">
+  <title>video system</title>
+  <style>
+body {
+    background-color: black;
+    color: black;
+}
+button {
+  background-color: black;
+  color: LimeGreen;
+}
+#firstpage {
+  float: left;
+  width: 250px;
+  height: 100%;
+  visibility: hidden;
+  /*background-color: LightBlue;*/
+}
+#secondpage {
+  /*background-color: Lavender;*/
+}
+</style>
 </head>
 <body>
-<!-- Accordion -->
-<h2 class="demoHeaders">Accordion</h2>
-<div id="accordion">
-    <h3>First</h3>
-    <div><a href="./page_01.html">Video 1</a><br></div>
-    <h3>Second</h3>
-    <div><a href="./page_02.html">Video 2</a><br></div>
-    <h3>Third</h3>
-    <div><a href="./page_03.html">Video 3</a><br></div>
-    <h3>Third_2</h3>
-    <div>
-      <video id="video" width="800" height="450">
-        <source src="/video/video_03.mp4">
-        Your browser does not support the video tag.
-      </video><br>
-    </div>
-</div>
-
-<script src="http://piwnica/jquery-ui/external/jquery/jquery.js"></script>
-<script src="http://piwnica/jquery-ui/jquery-ui.js"></script>
+  <div id="firstpage">
+  <form name="numPad">
+  <table cellpadding="2" cellspacing="2" border="0">
+  <tr>
+       <td colspan="3" align="center"><input type="text" name="quantity" size="20"></td>
+  </tr>
+  <tr>
+       <td><input type="button" value="1" style="font-size:25px;" onclick = "document.numPad.quantity.value += this.value"></td>
+       <td><input type="Button" value="2" style="font-size:25px;" onclick = "document.numPad.quantity.value += this.value"></td>
+       <td><input type="Button" value="3" style="font-size:25px;" onclick = "document.numPad.quantity.value += this.value"></td>
+  </tr>
+  <tr>
+       <td><input type="Button" value="4" style="font-size:25px;" onclick = "document.numPad.quantity.value += this.value"></td>
+       <td><input type="Button" value="5" style="font-size:25px;" onclick = "document.numPad.quantity.value += this.value"></td>
+       <td><input type="Button" value="6" style="font-size:25px;" onclick = "document.numPad.quantity.value += this.value"></td>
+  </tr>
+  <tr>
+       <td><input type="Button" value="7" style="font-size:25px;" onclick = "document.numPad.quantity.value += this.value"></td>
+       <td><input type="Button" value="8" style="font-size:25px;" onclick = "document.numPad.quantity.value += this.value"></td>
+       <td><input type="Button" value="9" style="font-size:25px;" onclick = "document.numPad.quantity.value += this.value"></td>
+  </tr>
+  <tr>
+       <td><input type="Button" value="C" style="font-size:25px;" onclick = "document.numPad.quantity.value = ''"></td>
+       <td><input type="Button" value="0" style="font-size:25px;" onclick = "document.numPad.quantity.value += this.value"></td>
+       <td><input type="Button" value="OK" style="font-size:25px;"></td>
+  </tr>
+  </table>
+  </form>
+  <p><button type="Button" onclick="DrawVideo()">Video</button><br><br><button type="Button" onclick="DrawCode()">Code</button>
+  </div>
+  <div id="secondpage"><p><img src="./pic/warning.gif"/></p></div>
 <script>
-  $( "#accordion" ).accordion({
-      heightStyle: "content"
-    });
 
-  var video = document.getElementById('video');
-  video.addEventListener('click',function(){
-    video.play();
-  },false);
+var myVar = setInterval(myTimer, 5000);
+var runOnceFlag1 = 1;
+
+function myTimer() {
+  loadDoc("http://adminpiwnica:8080/scripts/get_currentstep.pl", prepare_output);
+}
+
+function loadDoc(url, cFunction) {
+  var jsonhttp=new XMLHttpRequest();
+  jsonhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      cFunction(this);
+    }
+  };
+  jsonhttp.open("GET", url, true);
+  jsonhttp.send();
+}
+
+function prepare_output(jsonhttp) {
+  var myObjHint = JSON.parse(jsonhttp.responseText);
+  if (myObjHint.currentstep == "5") {
+    if (runOnceFlag1) {
+      document.getElementById("secondpage").innerHTML = "<button type='Button' onclick='DrawMe()' style='border: 0;padding: 0'><img src='./pic/fingerprint.jpg' style='height:200px;'></button>";
+      runOnceFlag1 = 0;
+    }
+  } else if (myObjHint.currentstep == "xxx") {
+    if (runOnceFlag2) {
+      document.getElementById("firstpage").innerHTML = "";
+      clearInterval(myVar);
+      runOnceFlag2 = 0;
+    }
+  }
+}
+
+function continueRefresh() {
+  myVar = setInterval(myTimer, 1000);
+  document.getElementById("firstpage").innerHTML = "";
+}
+
+function DrawMe() {
+  // myVar = setInterval(myTimer, 1000);
+  document.getElementById("firstpage").style.visibility = "visible";
+  document.getElementById("secondpage").innerHTML = "";
+}
+
 </script>
 </body>
 </html>
-

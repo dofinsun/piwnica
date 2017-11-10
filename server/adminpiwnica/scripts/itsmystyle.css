@@ -1,0 +1,49 @@
+		.rectangle {
+		  fill: Gainsboro;
+		  stroke-width: 5;
+		  stroke: Black ;
+		}
+
+		.walline {
+		  stroke: Black;
+		  stroke-width: 5;
+		}
+
+		.doorline {
+		  stroke: DarkCyan;
+		  stroke-width: 5;
+		}
+
+		.windowline{
+		  stroke: DarkBlue;
+		  stroke-width: 5;
+		}
+
+		.simafore {
+		  stroke: Black;
+		  stroke-width: 1;
+		  fill: DarkOrange;
+		}
+
+		#plan {
+			float: left;
+			width: 750px;
+		}
+
+		#firstpage {
+		}
+
+		#secondpage {
+			clear: left;
+		}
+
+		table.SomeTable {
+			float: right;
+			background-color: #EEEEEE;
+			border: 1px solid #AAAAAA;
+			padding: 2px 5px;
+		}
+		table.SomeTable td, table.SomeTable th {
+  		border: 1px solid #AAAAAA;
+  		padding: 2px 5px;
+		}
