@@ -1,24 +1,26 @@
-const byte LED1 = 11;
+const byte LED1 = 9;
 const byte LED2 = 10;
-const byte LED3 = 9;
-const byte LED4 = 3;
-const byte LEDred = 6;
-const byte LEDgreen = 5;
+const byte LED3 = 11;
+const byte LED4 = 12;
+const byte LED5 = 13;
+const byte LEDred = 5;
+const byte LEDgreen = 6;
 const byte Button = 4;
 #define WaitDel 200
-
 
 void setup() {
   pinMode(LED1, OUTPUT);
   pinMode(LED2, OUTPUT);
   pinMode(LED3, OUTPUT);
   pinMode(LED4, OUTPUT);
+  pinMode(LED5, OUTPUT);
   pinMode(LEDred, OUTPUT);
   pinMode(LEDgreen, OUTPUT);
   digitalWrite(LED1, HIGH);
   digitalWrite(LED2, HIGH);
   digitalWrite(LED3, HIGH);
   digitalWrite(LED4, HIGH);
+  digitalWrite(LED5, HIGH);
   digitalWrite(LEDgreen, HIGH);
   digitalWrite(LEDred, LOW);
   pinMode(Button, INPUT_PULLUP);
@@ -38,12 +40,14 @@ void loop() {
     digitalWrite(LED2, LOW);
     digitalWrite(LED3, LOW);
     digitalWrite(LED4, LOW);
+    digitalWrite(LED5, LOW);
     digitalWrite(LEDgreen, LOW);
     delay(myDelay[i]);
     digitalWrite(LED1, HIGH);
     digitalWrite(LED2, HIGH);
     digitalWrite(LED3, HIGH);
     digitalWrite(LED4, HIGH);
+    digitalWrite(LED5, HIGH);
     digitalWrite(LEDgreen, HIGH);
     delay(myDelay[i]);
   }
@@ -52,6 +56,7 @@ void loop() {
     analogWrite(LED2, i);
     analogWrite(LED3, i);
     analogWrite(LED4, i);
+    analogWrite(LED5, i);
     analogWrite(LEDgreen, i);
     delay(10);
     }
@@ -64,6 +69,8 @@ void loop() {
   delay(500);
   digitalWrite(LED4, HIGH);
   digitalWrite(LEDgreen, HIGH);
+  delay(500);
+  digitalWrite(LED5, HIGH);
   delay(500);
   for(i = 0; i <=5; i++) {
     digitalWrite(LEDgreen, LOW);
