@@ -15,7 +15,7 @@ const byte TruncButton_pin = 8;
 const byte TruncLed_pin = 9;
 const byte RedAlert_pin = 11;
 const byte ERR_pin = 13;
-unsigned int doorway = 4000; // empty doorway
+unsigned int doorway = 3800; // empty doorway
 
 #include <SPI.h>
 #include <Ethernet.h>
