@@ -16,10 +16,18 @@ const byte TPLedr_pin = A3;
 const byte TPLedl_pin = A4;
 const byte DLL_pin = 4;
 const byte DLS_pin = 5;
+const byte DLGH_pin = 6;
+const byte DLFAC_pin = 7;
 const byte DDc_pin = 8;
 const byte DDo_pin = 9;
 const byte Mon_pin = 11;
 const byte Mdir_pin = 12;
+
+int brightness = 40;
+int fadeAmount = 5;
+#define WaitDel2 40
+#define WaitDel3 60
+
 
 byte mac[] = {0xD0, 0xF1, 0xC0, 0xA8, 0x02, 0x05};
 IPAddress ip(192, 168, 2, 5);
@@ -39,8 +47,12 @@ void setup() {
   pinMode(TPLedl_pin, OUTPUT);
   pinMode(DLL_pin, OUTPUT);
   pinMode(DLS_pin, OUTPUT);
+  pinMode(DLGH_pin, OUTPUT);
+  pinMode(DLFAC_pin, OUTPUT);
   digitalWrite(DLL_pin, HIGH);
   digitalWrite(DLS_pin, HIGH);
+  digitalWrite(DLGH_pin, HIGH);
+  digitalWrite(DLFAC_pin, HIGH);
   pinMode(DDc_pin, INPUT_PULLUP);
   pinMode(DDo_pin, INPUT_PULLUP);
   pinMode(Mon_pin, OUTPUT);
@@ -144,6 +156,18 @@ void loop() {
           case 'r':               //lock DLS
             digitalWrite(DLS_pin, LOW);
             break;
+          case 'f':               //unlock DLGH
+            digitalWrite(DLGH_pin, HIGH);
+            break;
+          case 'g':               //lock DLGH
+            digitalWrite(DLGH_pin, LOW);
+            break;
+          case 'h':               //unlock DLFAC
+            digitalWrite(DLFAC_pin, HIGH);
+            break;
+          case 'j':               //lock DLFAC
+            digitalWrite(DLFAC_pin, LOW);
+            break;
           case 'a':               //Open Grate
             ACT = 1;
             break;
@@ -157,36 +181,49 @@ void loop() {
   client.stop();
 
   if (ACT == 1) {
-    digitalWrite(Mdir_pin, LOW);
-    delay(100);
-    DDo = digitalRead(DDo_pin);
-    while(DDo){
-      digitalWrite(Mon_pin, HIGH);
+    if (digitalRead(DDo_pin)) {
+      digitalWrite(Mdir_pin, LOW);
       delay(100);
-      DDo = digitalRead(DDo_pin);
-    }
-    digitalWrite(Mon_pin, LOW);
-    delay(100);
-    digitalWrite(Mdir_pin, HIGH);
+      brightness = 40;
+      for (int i = 0;  i < 16; i++) {
+        brightness += fadeAmount;
+        analogWrite(Mon_pin, brightness);
+        delay(WaitDel2);
+      }
+      delay(100);
+      for (int i = 0;  i < 20; i++) {
+        brightness -= fadeAmount;
+        analogWrite(Mon_pin, brightness);
+        delay(WaitDel3);
+      }
+      while(digitalRead(DDo_pin)) {
+        delay(20);
+      }
+      digitalWrite(Mon_pin, LOW);
+     }
     ACT = 0;
   }
   if (ACT == 2) {
-    digitalWrite(Mdir_pin, HIGH);
-    delay(100);
-    DDc = digitalRead(DDc_pin);
-    while(DDc){
-      TPr = digitalRead(TOUCHr_pin);
-      TPl = digitalRead(TOUCHl_pin);
-      if (TPr&&TPl) {
-        digitalWrite(Mon_pin, HIGH);
-        delay(100);
+    if (digitalRead(DDc_pin)) {
+      digitalWrite(Mdir_pin, HIGH);
+      delay(100);
+      brightness = 40;
+      for (int i = 0;  i < 16; i++) {
+        brightness += fadeAmount;
+        analogWrite(Mon_pin, brightness);
+        delay(WaitDel2);
       }
-      else {
-        digitalWrite(Mon_pin, LOW);
+      delay(100);
+      for (int i = 0;  i < 18; i++) {
+        brightness -= fadeAmount;
+        analogWrite(Mon_pin, brightness);
+        delay(WaitDel3);
       }
-      DDc = digitalRead(DDc_pin);
+      while(digitalRead(DDc_pin)) {
+        delay(20);
+      }
+      digitalWrite(Mon_pin, LOW);
     }
-    digitalWrite(Mon_pin, LOW);
     ACT = 0;
   }
 }

@@ -1,8 +1,8 @@
-const byte LED1 = 9;
-const byte LED2 = 10;
-const byte LED3 = 11;
-const byte LED4 = 12;
-const byte LED5 = 13;
+const byte LED1 = 12;
+const byte LED2 = 11;
+const byte LED3 = 10;
+const byte LED4 = 13;
+const byte LED5 = 9;
 const byte LEDred = 5;
 const byte LEDgreen = 6;
 const byte Button = 4;
@@ -40,15 +40,15 @@ void loop() {
     digitalWrite(LED2, LOW);
     digitalWrite(LED3, LOW);
     digitalWrite(LED4, LOW);
-    digitalWrite(LED5, LOW);
     digitalWrite(LEDgreen, LOW);
+    digitalWrite(LED5, LOW);
     delay(myDelay[i]);
     digitalWrite(LED1, HIGH);
     digitalWrite(LED2, HIGH);
     digitalWrite(LED3, HIGH);
     digitalWrite(LED4, HIGH);
-    digitalWrite(LED5, HIGH);
     digitalWrite(LEDgreen, HIGH);
+    digitalWrite(LED5, HIGH);
     delay(myDelay[i]);
   }
   for(i = 255; i >= 0; i=i-5) {
@@ -56,8 +56,8 @@ void loop() {
     analogWrite(LED2, i);
     analogWrite(LED3, i);
     analogWrite(LED4, i);
-    analogWrite(LED5, i);
     analogWrite(LEDgreen, i);
+    analogWrite(LED5, i);
     delay(10);
     }
   delay(1000);
