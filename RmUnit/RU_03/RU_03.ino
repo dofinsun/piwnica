@@ -13,8 +13,9 @@ const byte DD34a_pin = 6;
 const byte PowerCable_pin = 7;
 const byte TruncButton_pin = 8;
 const byte TruncLed_pin = 9;
+const byte RedAlert_pin = 11;
 const byte ERR_pin = 13;
-unsigned int doorway = 3500; // empty doorway
+unsigned int doorway = 3800; // empty doorway
 
 #include <SPI.h>
 #include <Ethernet.h>
@@ -51,6 +52,8 @@ void setup() {
   pinMode(TruncButton_pin, INPUT_PULLUP);
   pinMode(TruncLed_pin, OUTPUT);
   digitalWrite(TruncLed_pin, HIGH);
+  pinMode(RedAlert_pin, OUTPUT);
+  digitalWrite(RedAlert_pin, HIGH);
   
   Ethernet.begin(mac, ip, myDns, gateway, subnet);
   server.begin();
@@ -146,6 +149,12 @@ void loop() {
             break;
           case 'd':               //off TruncLed
             digitalWrite(TruncLed_pin, LOW);
+            break;
+          case 'f':               //unlock RedAlert
+            digitalWrite(RedAlert_pin, HIGH);
+            break;
+          case 'g':               //lock RedAlert
+            digitalWrite(RedAlert_pin, LOW);
             break;
         }
      }

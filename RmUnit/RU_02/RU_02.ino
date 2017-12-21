@@ -122,18 +122,8 @@ void loop() {
   drum = digitalRead(KEY_pin);
   if (drum) {
     KEY_status = "Close";
-    if (DD23_status == "Open") {
-      digitalWrite(GR23_pin, LOW);
-      digitalWrite(RED23_pin, HIGH);
-      digitalWrite(DL23_pin, LOW);
-    }
   } else {
     KEY_status = "Open";
-    if ((JACK_status == "Open") && (DD23_status == "Close")) {
-      digitalWrite(GR23_pin, HIGH);
-      digitalWrite(RED23_pin, LOW);
-      digitalWrite(DL23_pin, HIGH);
-    }
   }
 
   EthernetClient client = server.available();

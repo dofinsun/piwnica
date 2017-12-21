@@ -34,7 +34,7 @@ void setup() {
 
   pinMode(PIR6_pin, INPUT);
   pinMode(DDp1_pin, INPUT_PULLUP);
-  pinMode(DDp1_pin, INPUT_PULLUP);
+  pinMode(DDp2_pin, INPUT_PULLUP);
   pinMode(DLp1_pin, OUTPUT);
   pinMode(DLp2_pin, OUTPUT);
   pinMode(DLven_pin, OUTPUT);
@@ -91,17 +91,17 @@ void loop() {
   //Read grate p1 status
   drum = digitalRead(DDp1_pin);
   if (drum) {
-    DDp1_status = "Open";
-  } else {
     DDp1_status = "Close";
+  } else {
+    DDp1_status = "Open";
   }
 
   //Read grate p2 status
   drum = digitalRead(DDp2_pin);
   if (drum) {
-    DDp2_status = "Open";
-  } else {
     DDp2_status = "Close";
+  } else {
+    DDp2_status = "Open";
   }
 
   //Check wire status
