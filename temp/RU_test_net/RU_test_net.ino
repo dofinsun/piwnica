@@ -1,9 +1,9 @@
 #include <SPI.h>
 #include <Ethernet.h>
 byte mac[] = {0xD0, 0xF1, 0xC0, 0xA8, 0x02, 0x42};
-IPAddress ip(192, 168, 1, 42);
-IPAddress myDns(192, 168, 1, 1);
-IPAddress gateway(192, 168, 1, 1);
+IPAddress ip(192, 168, 100, 42);
+IPAddress myDns(192, 168, 100, 1);
+IPAddress gateway(192, 168, 100, 1);
 IPAddress subnet(255, 255, 255, 0);
 EthernetServer server = EthernetServer(404);
 
@@ -259,6 +259,3 @@ void loop() {
     }
   }
 }
-
-
-
