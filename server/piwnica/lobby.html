@@ -34,7 +34,7 @@ function loadDoc(url, cFunction) {
 
 function prepare_output(jsonhttp) {
   var myObjHint = JSON.parse(jsonhttp.responseText);
-  if (myObjHint.currentstep == "2") {
+  if (myObjHint.currentstep == "1") {
     if (runOnceFlag1) {
       document.getElementById("firstpage").innerHTML = "<video autoplay onended='continueRefresh()'><source src='/video/video_01.mp4' type='video/mp4'></video>";
       clearInterval(myVar);
