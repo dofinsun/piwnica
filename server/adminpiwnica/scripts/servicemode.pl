@@ -6,7 +6,7 @@ use diagnostics;
 use Net::Telnet ();
 use DBI;
 
-my $debug = 0;
+my $debug = 1;
 my $script_path = $0;
 $script_path =~ s/\/[\w \d]+\.pl$//;
 chdir $script_path;
@@ -40,10 +40,14 @@ tell_order($RuIps{RU_06}, $RU_orders{RU_06}->{DLp1_lock});
 set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DLp1');
 tell_order($RuIps{RU_06}, $RU_orders{RU_06}->{DLp2_lock});
 set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DLp2');
+tell_order($RuIps{RU_05}, $RU_orders{RU_05}->{Grate_open});
+set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLGrate');
 tell_order($RuIps{RU_04}, $RU_orders{RU_04}->{DLT_lock});
 set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DLT');
 tell_order($RuIps{RU_02}, $RU_orders{RU_02}->{DLdpk_lock});
 set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DLdpk');
+tell_order($RuIps{RU_01}, $RU_orders{RU_01}->{DL1_lock});
+set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DL1');
 
 $dbh->disconnect();
 

@@ -69,12 +69,16 @@ until ($GameStep == $LastGameStep) {
 	}
 # Game logic
 	switch ($GameStep) {
-		case 0		{ print "$GameStep step\n" if $debug;}
+		case 0		{ print "DD1=$RuSenVal{DD1}\n" if $debug;
+								if ($RuSenVal{DD1} eq "Close") {
+									print "Button DD1 was pushed. Go to next level.\n" if $debug;
+									$GameStep++;
+									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+								}
+							}
 		case 1		{ print "DD1=$RuSenVal{DD1}\n" if $debug;
 								if ($RuSenVal{DD1} eq "Close") {
 									print "Run GameLevel_1 subrutime.\n" if $debug;
-									tell_order($RuIps{RU_01}, $RU_orders{RU_01}->{DL1_lock});
-									set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DL1');
 									$GameStep++;
 									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
 								}
@@ -261,8 +265,6 @@ sub prepare_room {
 	    }
 	  }
 	}
-	tell_order($RuIps{RU_05}, $RU_orders{RU_05}->{DLGrate_open});
+	tell_order($RuIps{RU_05}, $RU_orders{RU_05}->{Grate_open});
 	set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLGrate');
-	tell_order($RuIps{RU_01}, $RU_orders{RU_01}->{DL1_unlock});
-	set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DL1');
 }
