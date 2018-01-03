@@ -48,8 +48,8 @@
 		  <g><circle id="DL34b" cx="475" cy="375" r="5" class="simafore"/><title>DL34b</title></g>
 			<g><circle id="DLdpk" cx="225" cy="300" r="5" class="simafore"/><title>DLdpk</title></g>
 			<g><circle id="DLGrate" cx="625" cy="200" r="5" class="simafore"/><title>DLGrate</title></g>
-			<g><circle id="DLFAC" cx="625" cy="190" r="5" class="simafore"/><title>DLFAC</title></g>
-			<g><circle id="DLGH" cx="625" cy="180" r="5" class="simafore"/><title>DLGH</title></g>
+			<g><circle id="DLFAC" cx="625" cy="180" r="5" class="simafore"/><title>DLFAC</title></g>
+			<g><circle id="DLGH" cx="625" cy="190" r="5" class="simafore"/><title>DLGH</title></g>
 			<g><circle id="DLL" cx="550" cy="394" r="5" class="simafore"/><title>DLL</title></g>
 			<g><circle id="DLL0" cx="400" cy="10" r="5" class="simafore"/><title>DLL0</title></g>
 			<g><circle id="DLL1" cx="410" cy="10" r="5" class="simafore"/><title>DLL1</title></g>
@@ -71,7 +71,6 @@
 		  <option value="3">3 players</option>
 		  <option value="4">4 players</option>
 		  <option value="5">5 players</option>
-		  <option value="6">6 players</option>
 		</select>
 		<button type="Button" id="StartButton" onclick="GameStart()">Start</button><br>&nbsp;&nbsp;&nbsp;
 		<p><button type="Button" onclick="loadDoc('scripts/servicemode.pl', dummy);">ServiceMode</button></p>
@@ -101,7 +100,7 @@
 			document.getElementById("demo").innerHTML = "Ok";
 			loadDoc("scripts/starthegame.pl?Players=" + document.getElementById("Players").value, dummy);
 			document.getElementById("firstpage").innerHTML = firstpagedata;
-			var myVar = setInterval(myTimer, 1000);
+			var myVar = setInterval(myTimer, 1500);
 		} else {
 			window.alert("Wrong password!!!");
 		}
@@ -150,8 +149,8 @@
 	}
 
 	function drawPlan() {
-		var	simafores = {"DL1":0,"DL12":1,"DL23":2,"DL34a":3,"DL34b":4,"DLComBox":5,"DLdpk":6,"DLGrate":7,"DLL":8,"DLL0":9,
-		"DLL1":10,"DLL2":11,"DLLightAlarm":12,"DLp1":13,"DLp2":14,"DLS":15,"DLT":16,"DLTruncLed":17,"DLven":18};
+		var	simafores = {"DL1":0, "DL12":1, "DL23":2, "DL34a":3, "DL34b":4, "DLComBox":5, "DLdpk":6, "DLFAC":7, "DLGH":8, "DLGrate":9,
+		"DLL":10, "DLL0":11, "DLL1":12, "DLL2":13, "DLLightAlarm":14, "DLp1":15, "DLp2":16, "DLS":17, "DLT":18, "DLTruncLed":19, "DLven":20};
 
 		var sensors = {"DD1":0,"DD12":1,"DD23":2,"DD34a":3,"DD34b":4,"DDdpk":5,"DDp1":6,"DDp2":7,"DDT":8,"Grate":9,"JACK":10,"KEY":11,
 		"KEY0":12,"KEY1":13,"KEY2":14,"KEY3":15,"KEYBOX":16,"NFC0":17,"NFC1":18,"NFC2":19,"NFC3":20,"NFC4":21,"NFC5":22,"NFC6":23,"PIR1":24,

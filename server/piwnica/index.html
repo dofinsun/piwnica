@@ -58,7 +58,7 @@ button {
   <div id="secondpage"><p><img src="./pic/warning.gif"/></p></div>
 <script>
 
-var myVar = setInterval(myTimer, 5000);
+var myVar = setInterval(myTimer, 1500);
 var runOnceFlag1 = 1;
 
 function myTimer() {
@@ -93,7 +93,7 @@ function prepare_output(jsonhttp) {
 }
 
 function continueRefresh() {
-  myVar = setInterval(myTimer, 1000);
+  myVar = setInterval(myTimer, 1500);
   document.getElementById("firstpage").innerHTML = "";
 }
 

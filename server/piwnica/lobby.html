@@ -13,7 +13,7 @@ body {
   <div id="firstpage"></div>
 <script>
 
-var myVar = setInterval(myTimer, 1000);
+var myVar = setInterval(myTimer, 1500);
 var runOnceFlag1 = 1;
 var runOnceFlag2 = 1;
 
@@ -40,7 +40,7 @@ function prepare_output(jsonhttp) {
       clearInterval(myVar);
       runOnceFlag1 = 0;
     }
-  } else if (myObjHint.currentstep == "3") {
+  } else if (myObjHint.currentstep == "11") {
     if (runOnceFlag2) {
       document.getElementById("firstpage").innerHTML = "<img src='http://piwnica:9090/?action=stream'>";
       clearInterval(myVar);
@@ -50,7 +50,7 @@ function prepare_output(jsonhttp) {
 }
 
 function continueRefresh() {
-  myVar = setInterval(myTimer, 1000);
+  myVar = setInterval(myTimer, 1500);
   document.getElementById("firstpage").innerHTML = "";
 }
 

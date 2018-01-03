@@ -71,39 +71,44 @@ until ($GameStep == $LastGameStep) {
 	switch ($GameStep) {
 		case 0		{ print "DD1=$RuSenVal{DD1}\n" if $debug;
 								if ($RuSenVal{DD1} eq "Close") {
-									print "Button DD1 was pushed. Go to next level.\n" if $debug;
+									print "Button DD1 was pushed. Go to next level to start game.\n" if $debug;
 									$GameStep++;
 									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
 								}
 							}
-		case 1		{ print "DD1=$RuSenVal{DD1}\n" if $debug;
-								if ($RuSenVal{DD1} eq "Close") {
-									print "Run GameLevel_1 subrutime.\n" if $debug;
-									$GameStep++;
-									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
-								}
-							}
-		case 2		{ print "USB=$RuSenVal{USB}\n" if $debug;
+		case 1		{ print "USB=$RuSenVal{USB}\n" if $debug;
 								if ($RuSenVal{USB} eq "Open"){
-									print "Run GameLevel_2 subrutime.\n" if $debug;
+									print "USBbox was open. Open door12\n" if $debug;
 									tell_order($RuIps{RU_01}, $RU_orders{RU_01}->{DL12_unlock});
 									set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DL12');
 									$GameStep++;
 									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
 								}
 							}
-		case 3		{ print "KEYBOX=$RuSenVal{KEYBOX}\n" if $debug;
+		case 2		{ print "KEYBOX=$RuSenVal{KEYBOX}\n" if $debug;
 								if ($RuSenVal{KEYBOX} eq "Open"){
-									print "Run GameLevel_3 subrutime.\n" if $debug;
+									print "KeyBox was open. Enable LightAlarm.\n" if $debug;
+									system "./playsiren.pl";
 									tell_order($RuIps{RU_02}, $RU_orders{RU_02}->{DLLightAlarm_unlock});
 									set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLLightAlarm');
 									$GameStep++;
 									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
 								}
 							}
+		case 3		{print "JACK=$RuSenVal{JACK} KEY=$RuSenVal{KEY}\n" if $debug;
+								if (($RuSenVal{JACK} eq "Open") && ($RuSenVal{KEY} eq "Open")){
+									print "JACK is solved and KEY pushed. Open D23.\n" if $debug;
+									tell_order($RuIps{RU_02}, $RU_orders{RU_02}->{DL23_unlock});
+									set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DL23');
+									$GameStep++;
+									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+								}
+							}
 		case 4		{ print "PowerCable=$RuSenVal{PowerCable}\n" if $debug;
 								if ($RuSenVal{PowerCable} eq "Open"){
-									print "Run GameLevel_4 subrutime.\n" if $debug;
+									print "Power cable was pluged. Svitch LightAlarm to light.\n" if $debug;
+									system "killall", "playsiren.pl";
+									system "killall", "mpg123";
 									tell_order($RuIps{RU_02}, $RU_orders{RU_02}->{DLLightAlarm_lock});
 									set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DLLightAlarm');
 									$GameStep++;
@@ -265,6 +270,17 @@ sub prepare_room {
 	    }
 	  }
 	}
+	tell_order($RuIps{RU_06}, $RU_orders{RU_06}->{DLven_unlock});
+	set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLven');
+	tell_order($RuIps{RU_05}, $RU_orders{RU_05}->{DLGH_unlock});
+	set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLGH');
+	sleep 1;
 	tell_order($RuIps{RU_05}, $RU_orders{RU_05}->{Grate_open});
 	set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLGrate');
+	tell_order($RuIps{RU_05}, $RU_orders{RU_05}->{DLL_unlock});
+	set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLL');
+	tell_order($RuIps{RU_05}, $RU_orders{RU_05}->{DLS_unlock});
+	set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLS');
+	tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{DLComBox_unlock});
+	set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLComBox');
 }

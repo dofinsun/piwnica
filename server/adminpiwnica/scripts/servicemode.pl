@@ -44,8 +44,12 @@ tell_order($RuIps{RU_05}, $RU_orders{RU_05}->{Grate_open});
 set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLGrate');
 tell_order($RuIps{RU_04}, $RU_orders{RU_04}->{DLT_lock});
 set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DLT');
+tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{RedAlert_lock});
+set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'RedAlert');
 tell_order($RuIps{RU_02}, $RU_orders{RU_02}->{DLdpk_lock});
 set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DLdpk');
+tell_order($RuIps{RU_02}, $RU_orders{RU_02}->{DLLightAlarm_lock});
+set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DLLightAlarm');
 tell_order($RuIps{RU_01}, $RU_orders{RU_01}->{DL1_lock});
 set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DL1');
 

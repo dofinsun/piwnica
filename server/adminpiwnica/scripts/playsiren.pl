@@ -8,8 +8,7 @@ unless ($pid = fork) {
     close STDOUT;
     close STDERR;
     while (1) {
-      system "mpg123", "-q", "../scripts/sound/ElectricEmergency.mp3";
-#      sleep 1;
+      system "mpg123", "-q", "./sound/ElectricEmergency.mp3";
     }
     exit 0;
   }
