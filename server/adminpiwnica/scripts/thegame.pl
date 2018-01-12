@@ -95,7 +95,7 @@ until ($GameStep == $LastGameStep) {
 									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
 								}
 							}
-		case 3		{print "JACK=$RuSenVal{JACK} KEY=$RuSenVal{KEY}\n" if $debug;
+		case 3		{ print "JACK=$RuSenVal{JACK} KEY=$RuSenVal{KEY}\n" if $debug;
 								if (($RuSenVal{JACK} eq "Open") && ($RuSenVal{KEY} eq "Open")){
 									print "JACK is solved and KEY pushed. Open D23.\n" if $debug;
 									tell_order($RuIps{RU_02}, $RU_orders{RU_02}->{DL23_unlock});
@@ -115,7 +115,7 @@ until ($GameStep == $LastGameStep) {
 									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
 								}
 							}
-		case 5		{
+		case 5		{ print "Table KEYS=$RuSenVal{KEY0} $RuSenVal{KEY1} $RuSenVal{KEY2} $RuSenVal{KEY3}\n" if $debug;
 
 							}
 		case 6		{

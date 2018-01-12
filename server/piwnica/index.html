@@ -5,22 +5,26 @@
   <title>video system</title>
   <style>
 body {
-    background-color: black;
+    background-color: #ccccff;
     color: black;
+    /*background-color: black;
+    color: black;*/
 }
 button {
-  background-color: black;
-  color: LimeGreen;
+  background-color: #ccffcc;
+  color: black;
+  /*background-color: black;
+  color: LimeGreen;*/
 }
 #firstpage {
   float: left;
   width: 250px;
-  height: 100%;
+  height: 800px;
   visibility: hidden;
-  /*background-color: LightBlue;*/
+  background-color: #ffffcc;
 }
 #secondpage {
-  /*background-color: Lavender;*/
+  background-color: #ffccff;
 }
 </style>
 </head>
@@ -49,20 +53,25 @@ button {
   <tr>
        <td><input type="Button" value="C" style="font-size:25px;" onclick = "document.numPad.quantity.value = ''"></td>
        <td><input type="Button" value="0" style="font-size:25px;" onclick = "document.numPad.quantity.value += this.value"></td>
-       <td><input type="Button" value="OK" style="font-size:25px;"></td>
+       <td><input type="Button" value="OK" style="font-size:25px;" onclick = CodeCheck()></td>
   </tr>
   </table>
   </form>
-  <p><button type="Button" onclick="DrawVideo()">Video</button><br><br><button type="Button" onclick="DrawCode()">Code</button>
+  <p><button type="Button" onclick="Stream()">Live Stream</button><br><br>
+  <button type="Button" onclick="Archive()">Archive</button></p>
   </div>
   <div id="secondpage"><p><img src="./pic/warning.gif"/></p></div>
 <script>
 
 var myVar = setInterval(myTimer, 1500);
 var runOnceFlag1 = 1;
+var myObjHint;
+var myVideoURL = {video1:"/video/VID_1.mp4", video2:"/video/VID_2.mp4", video3:"/video/VID_3.mp4", video4:"/video/VID_4.mp4", video5:"/video/VID_5.mp4", video6:"/video/VID_6.mp4"};
+var myVideoShow = {video1:"No", video2:"No", video3:"No", video4:"No", video5:"No", video6:"No"};
+document.addEventListener('contextmenu', event => event.preventDefault());
 
 function myTimer() {
-  loadDoc("http://adminpiwnica:8080/scripts/get_currentstep.pl", prepare_output);
+  loadDoc("http://adminpiwnica:8080/scripts/get_currentmove.pl", prepare_output);
 }
 
 function loadDoc(url, cFunction) {
@@ -77,13 +86,14 @@ function loadDoc(url, cFunction) {
 }
 
 function prepare_output(jsonhttp) {
-  var myObjHint = JSON.parse(jsonhttp.responseText);
+  myObjHint = JSON.parse(jsonhttp.responseText);
   if (myObjHint.currentstep == "5") {
     if (runOnceFlag1) {
-      document.getElementById("secondpage").innerHTML = "<button type='Button' onclick='DrawMe()' style='border: 0;padding: 0'><img src='./pic/fingerprint.jpg' style='height:200px;'></button>";
+      document.getElementById("secondpage").innerHTML = "<button type='Button' onclick='DrawMe()' style='border: 0;padding: 0'><img src='./pic/fingerprint.jpg' style='height:300px;'></button>";
       runOnceFlag1 = 0;
     }
   } else if (myObjHint.currentstep == "xxx") {
+    //Not Used!!!!
     if (runOnceFlag2) {
       document.getElementById("firstpage").innerHTML = "";
       clearInterval(myVar);
@@ -98,9 +108,61 @@ function continueRefresh() {
 }
 
 function DrawMe() {
-  // myVar = setInterval(myTimer, 1000);
-  document.getElementById("firstpage").style.visibility = "visible";
+  if (myObjHint.movement == "Clear") {
+    document.getElementById("firstpage").style.visibility = "visible";
+    document.getElementById("secondpage").innerHTML = "";
+  } else {
+    window.alert("Intruders in the outer perimeter were detected!");
+  }
+}
+
+function Stream() {
+  document.getElementById("secondpage").innerHTML = "<img src='http://piwnica:9090/?action=stream'>";
+}
+
+function Archive() {
   document.getElementById("secondpage").innerHTML = "";
+  for (var vid in myVideoShow) {
+    //console.log(vid + " " + myVideoShow[vid]);
+    if (myVideoShow[vid] == "Yes") {
+      document.getElementById("secondpage").innerHTML += "<button type='Button' onclick='PlayMe(\"" + vid +"\")'><img src='/pic/" + vid +".png'></button><br>";
+    }
+  }
+}
+
+function CodeCheck() {
+  if (document.numPad.quantity.value == "111"){
+    myVideoShow.video1 = "Yes";
+    PlayMe("video1");
+  } else if (document.numPad.quantity.value == "222") {
+    myVideoShow.video2 = "Yes";
+    PlayMe("video2");
+  } else if (document.numPad.quantity.value == "333") {
+    myVideoShow.video3 = "Yes";
+    PlayMeAndOpen("video3");
+  } else if (document.numPad.quantity.value == "444") {
+    myVideoShow.video4 = "Yes";
+    PlayMe("video4");
+  } else if (document.numPad.quantity.value == "555") {
+    myVideoShow.video5 = "Yes";
+    PlayMe("video5");
+  } else if (document.numPad.quantity.value == "666") {
+    myVideoShow.video6 = "Yes";
+    PlayMe("video6");
+  }
+  document.numPad.quantity.value = "";
+}
+
+function PlayMe(AcseptedToPlay) {
+  document.getElementById("secondpage").innerHTML = "<video autoplay><source src='" + myVideoURL[AcseptedToPlay] + "' type='video/mp4'></video>";
+}
+function PlayMeAndOpen(AcseptedToPlay) {
+  document.getElementById("secondpage").innerHTML = "<video autoplay onended='OpenTable()'><source src='" + myVideoURL[AcseptedToPlay] + "' type='video/mp4'></video>";
+}
+function OpenTable() {
+  loadDoc("http://adminpiwnica:8080/scripts/opentable.pl", dummy);
+}
+function dummy(jsonhttp) {
 }
 
 </script>
