@@ -5,26 +5,25 @@
   <title>video system</title>
   <style>
 body {
-    background-color: #ccccff;
     color: black;
-    /*background-color: black;
-    color: black;*/
+    background-color: black;
 }
 button {
-  background-color: #ccffcc;
-  color: black;
-  /*background-color: black;
-  color: LimeGreen;*/
+  font-size:18px;
+  background-color: black;
+  color: LimeGreen;
 }
 #firstpage {
   float: left;
   width: 250px;
-  height: 800px;
+  height: 900px;
   visibility: hidden;
-  background-color: #ffffcc;
+  background-color: black;
 }
 #secondpage {
-  background-color: #ffccff;
+  width: 1850px;
+  height: 900px;
+  background-color: black;
 }
 </style>
 </head>
@@ -154,10 +153,10 @@ function CodeCheck() {
 }
 
 function PlayMe(AcseptedToPlay) {
-  document.getElementById("secondpage").innerHTML = "<video autoplay><source src='" + myVideoURL[AcseptedToPlay] + "' type='video/mp4'></video>";
+  document.getElementById("secondpage").innerHTML = "<video width='1600' height='900' autoplay><source src='" + myVideoURL[AcseptedToPlay] + "' type='video/mp4'></video>";
 }
 function PlayMeAndOpen(AcseptedToPlay) {
-  document.getElementById("secondpage").innerHTML = "<video autoplay onended='OpenTable()'><source src='" + myVideoURL[AcseptedToPlay] + "' type='video/mp4'></video>";
+  document.getElementById("secondpage").innerHTML = "<video width='1600' height='900' autoplay onended='OpenTable()'><source src='" + myVideoURL[AcseptedToPlay] + "' type='video/mp4'></video>";
 }
 function OpenTable() {
   loadDoc("http://adminpiwnica:8080/scripts/opentable.pl", dummy);

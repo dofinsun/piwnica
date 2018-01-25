@@ -116,19 +116,149 @@ until ($GameStep == $LastGameStep) {
 								}
 							}
 		case 5		{ print "Table KEYS=$RuSenVal{KEY0} $RuSenVal{KEY1} $RuSenVal{KEY2} $RuSenVal{KEY3}\n" if $debug;
-
+								if ($GameStatus{Players} == 3) {
+									if (($RuSenVal{KEY0} eq "Open") && ($RuSenVal{KEY1} eq "Open")){
+										print "KEY0 and KEY1 has been turned on. Light TruncLed.\n" if $debug;
+										TruncLed(1);
+									}
+								}
+								if ($GameStatus{Players} == 4) {
+									if (($RuSenVal{KEY0} eq "Open") && ($RuSenVal{KEY1} eq "Open") && ($RuSenVal{KEY2} eq "Open")){
+										print "KEY0,1,2 has been turned on. Light TruncLed.\n" if $debug;
+										TruncLed(1);
+									}
+								}
+								if ($GameStatus{Players} == 5) {
+									if (($RuSenVal{KEY0} eq "Open") && ($RuSenVal{KEY1} eq "Open") && ($RuSenVal{KEY2} eq "Open") && ($RuSenVal{KEY3} eq "Open")){
+										print "KEY0,1,2,3 has been turned on. Light TruncLed.\n" if $debug;
+										TruncLed(1);
+									}
+								}
 							}
-		case 6		{
-
+		case 6		{ print "TruncButton=$RuSenVal{TruncButton} \n" if $debug;
+								if ($RuSenVal{TruncButton} eq "Open"){
+									if ($GameStatus{Players} == 3) {
+										if (($RuSenVal{KEY0} eq "Open") && ($RuSenVal{KEY1} eq "Open")){
+											print "TruncButton has been pushed and KEY0, KEY1 still turned on. Open DL34a.\n" if $debug;
+											tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{DL34a_unlock});
+											set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DL34a');
+											$GameStep++;
+											set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+											TruncLed(0);
+											tell_order($RuIps{RU_01}, $RU_orders{RU_01}->{DL12_lock});
+											set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DL12');
+											tell_order($RuIps{RU_02}, $RU_orders{RU_02}->{DL23_lock});
+											set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DL34a');
+										}else{
+											TruncLed(0);
+											$GameStep--;
+											set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+										}
+									}
+									if ($GameStatus{Players} == 4) {
+										if (($RuSenVal{KEY0} eq "Open") && ($RuSenVal{KEY1} eq "Open") && ($RuSenVal{KEY2} eq "Open")){
+											print "TruncButton has been pushed and KEY0,1,2 still turned on. Open DL34a.\n" if $debug;
+											tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{DL34a_unlock});
+											set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DL34a');
+											$GameStep++;
+											set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+											TruncLed(0);
+											tell_order($RuIps{RU_01}, $RU_orders{RU_01}->{DL12_lock});
+											set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DL12');
+											tell_order($RuIps{RU_02}, $RU_orders{RU_02}->{DL23_lock});
+											set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DL34a');
+										}else{
+											TruncLed(0);
+											$GameStep--;
+											set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+										}
+									}
+									if ($GameStatus{Players} == 5) {
+										if (($RuSenVal{KEY0} eq "Open") && ($RuSenVal{KEY1} eq "Open") && ($RuSenVal{KEY2} eq "Open") && ($RuSenVal{KEY3} eq "Open")){
+											print "TruncButton has been pushed and KEY0,1,2,3 still turned on. Open DL34a.\n" if $debug;
+											tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{DL34a_unlock});
+											set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DL34a');
+											$GameStep++;
+											set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+											TruncLed(0);
+											tell_order($RuIps{RU_01}, $RU_orders{RU_01}->{DL12_lock});
+											set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DL12');
+											tell_order($RuIps{RU_02}, $RU_orders{RU_02}->{DL23_lock});
+											set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DL34a');
+										}else{
+											TruncLed(0);
+											$GameStep--;
+											set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+										}
+									}
+								}
 							}
-		case 7		{
-
+		case 7		{ print "DD34a=$RuSenVal{DD34a}\n UZ0=$RuSenVal{UZ0}" if $debug;
+								if ($RuSenVal{UZ0} eq "Detect"){
+									if ($RuSenVal{DD34a} eq "Close"){
+										if ($GameStatus{Players} == 3) {
+											if (($RuSenVal{KEY0} eq "Open") && ($RuSenVal{KEY1} eq "Open")){
+												print "UZ0 detected, DD34a closed, KEY0,1 turned. Transpond.\n" if $debug;
+												tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{DL34a_lock});
+												set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DL34a');
+												sleep 3;
+												tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{DL34b_unlock});
+												set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DL34b');
+												$GameStep++;
+												set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+											}
+										}
+										if ($GameStatus{Players} == 4) {
+											if (($RuSenVal{KEY0} eq "Open") && ($RuSenVal{KEY1} eq "Open") && ($RuSenVal{KEY2} eq "Open")){
+												print "UZ0 detected, DD34a closed, KEY0,1,2 turned. Transpond.\n" if $debug;
+												tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{DL34a_lock});
+												set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DL34a');
+												sleep 3;
+												tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{DL34b_unlock});
+												set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DL34b');
+												$GameStep++;
+												set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+											}
+										}
+										if ($GameStatus{Players} == 5) {
+											if (($RuSenVal{KEY0} eq "Open") && ($RuSenVal{KEY1} eq "Open") && ($RuSenVal{KEY2} eq "Open") && ($RuSenVal{KEY3} eq "Open")){
+												print "UZ0 detected, DD34a closed, KEY0,1,2,3 turned. Transpond.\n" if $debug;
+												tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{DL34a_lock});
+												set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DL34a');
+												sleep 3;
+												tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{DL34b_unlock});
+												set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DL34b');
+												$GameStep++;
+												set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+											}
+										}
+									}
+								}
 							}
-		case 8		{
-
+		case 8		{ print "PIR5=$RuSenVal{PIR5}\n" if $debug;
+								if ($RuSenVal{PIR5} eq "Detect"){
+									print "Intruder detected. Enable Sirene.\n" if $debug;
+									system "./playsiren.pl";
+									tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{RedAlert_unlock});
+									set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'RedAlert');
+									$GameStep++;
+									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+								}
 							}
-		case 9		{
-
+		case 9		{ print "TOUCH $RuSenVal{TOUCHl} $RuSenVal{TOUCHr}\n" if $debug;
+								if (($RuSenVal{TOUCHl} eq "Available") && ($RuSenVal{TOUCHr} eq "Available")) {
+									print "Prisoner in the jail.\n" if $debug;
+									tell_order($RuIps{RU_05}, $RU_orders{RU_05}->{DLGH_lock});
+									set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DLGH');
+									tell_order($RuIps{RU_05}, $RU_orders{RU_05}->{Grate_close});
+									set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DLGrate');
+									system "killall", "playsiren.pl";
+									system "killall", "mpg123";
+									tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{RedAlert_lock});
+									set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'RedAlert');
+									$GameStep++;
+									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+								}
 							}
 		case 10		{
 
@@ -283,4 +413,16 @@ sub prepare_room {
 	set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLS');
 	tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{DLComBox_unlock});
 	set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLComBox');
+}
+
+sub TruncLed {
+	if ($_[0] == 1){
+		tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{DLTruncLed_on});
+		set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLTruncLed');
+		$GameStep++;
+		set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+	}else{
+		tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{DLTruncLed_off});
+		set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DLTruncLed');
+	}
 }
