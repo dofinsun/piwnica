@@ -56,14 +56,15 @@ button {
   </tr>
   </table>
   </form>
-  <p><button type="Button" onclick="Stream()">Live Stream</button><br><br>
-  <button type="Button" onclick="Archive()">Archive</button></p>
+  <p><button type="Button" onclick="Archive()">Archive</button><br><br>
+  <button id="stream" type="Button" onclick="Stream()" style="visibility: hidden;">Live Stream</button></p>
   </div>
   <div id="secondpage"><p><img src="./pic/warning.gif"/></p></div>
 <script>
 
 var myVar = setInterval(myTimer, 1500);
 var runOnceFlag1 = 1;
+var runOnceFlag2 = 1;
 var myObjHint;
 var myVideoURL = {video1:"/video/VID_1.mp4", video2:"/video/VID_2.mp4", video3:"/video/VID_3.mp4", video4:"/video/VID_4.mp4", video5:"/video/VID_5.mp4", video6:"/video/VID_6.mp4"};
 var myVideoShow = {video1:"No", video2:"No", video3:"No", video4:"No", video5:"No", video6:"No"};
@@ -91,11 +92,10 @@ function prepare_output(jsonhttp) {
       document.getElementById("secondpage").innerHTML = "<button type='Button' onclick='DrawMe()' style='border: 0;padding: 0'><img src='./pic/fingerprint.jpg' style='height:300px;'></button>";
       runOnceFlag1 = 0;
     }
-  } else if (myObjHint.currentstep == "xxx") {
-    //Not Used!!!!
+  } else if (myObjHint.currentstep == "10") {
     if (runOnceFlag2) {
-      document.getElementById("firstpage").innerHTML = "";
-      clearInterval(myVar);
+      myVideoShow.video4 = "Yes";
+      PlayMe("video4");
       runOnceFlag2 = 0;
     }
   }
@@ -140,11 +140,11 @@ function CodeCheck() {
     myVideoShow.video3 = "Yes";
     PlayMeAndOpen("video3");
   } else if (document.numPad.quantity.value == "444") {
-    myVideoShow.video4 = "Yes";
-    PlayMe("video4");
+    document.getElementById("stream").style.visibility = "visible";
+    loadDoc("http://adminpiwnica:8080/scripts/opencombox.pl", dummy);
   } else if (document.numPad.quantity.value == "555") {
     myVideoShow.video5 = "Yes";
-    PlayMe("video5");
+    PlayMeAndTurn("video5");
   } else if (document.numPad.quantity.value == "666") {
     myVideoShow.video6 = "Yes";
     PlayMe("video6");
@@ -158,9 +158,17 @@ function PlayMe(AcseptedToPlay) {
 function PlayMeAndOpen(AcseptedToPlay) {
   document.getElementById("secondpage").innerHTML = "<video width='1600' height='900' autoplay onended='OpenTable()'><source src='" + myVideoURL[AcseptedToPlay] + "' type='video/mp4'></video>";
 }
+function PlayMeAndTurn(AcseptedToPlay) {
+  document.getElementById("secondpage").innerHTML = "<video width='1600' height='900' autoplay onended='TurnOnLight()'><source src='" + myVideoURL[AcseptedToPlay] + "' type='video/mp4'></video>";
+}
 function OpenTable() {
   loadDoc("http://adminpiwnica:8080/scripts/opentable.pl", dummy);
 }
+
+function TurnOnLight() {
+  loadDoc("http://adminpiwnica:8080/scripts/turnonlight.pl", dummy);
+}
+
 function dummy(jsonhttp) {
 }
 
