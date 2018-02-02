@@ -29,8 +29,9 @@ my $dbh = DBI->connect("DBI:SQLite:dbname=pigame.db",
 set_val_dbi('GameStat', 'Value', $Players, 'Param', 'Players');
 
 my $GameStep = 0;
-my $LastGameStep = 11;
+my $LastGameStep = 30;
 my $ForceNextLevel = 0;
+my $RunOnceFlag = 1;
 
 my %RuIps = load_val_dbi('RuName', 'RuIp', 'RmUnits');						#RemoteUnit IP`s
 my %RuStat = load_val_dbi('RuName', 'Status', 'RmUnits');					#RemoteUnit status (Up/Down)
@@ -88,7 +89,7 @@ until ($GameStep == $LastGameStep) {
 		case 2		{ print "KEYBOX=$RuSenVal{KEYBOX}\n" if $debug;
 								if ($RuSenVal{KEYBOX} eq "Open"){
 									print "KeyBox was open. Enable LightAlarm.\n" if $debug;
-									system "./playsiren.pl";
+									system "./playsiren.pl", "empowsupp.mp3";
 									tell_order($RuIps{RU_02}, $RU_orders{RU_02}->{DLLightAlarm_unlock});
 									set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLLightAlarm');
 									$GameStep++;
@@ -193,7 +194,7 @@ until ($GameStep == $LastGameStep) {
 									}
 								}
 							}
-		case 7		{ print "DD34a=$RuSenVal{DD34a}\n UZ0=$RuSenVal{UZ0}" if $debug;
+		case 7		{ print "UZ0=$RuSenVal{UZ0} DD34a=$RuSenVal{DD34a} \n" if $debug;
 								if ($RuSenVal{UZ0} eq "Detect"){
 									if ($RuSenVal{DD34a} eq "Close"){
 										if ($GameStatus{Players} == 3) {
@@ -236,9 +237,9 @@ until ($GameStep == $LastGameStep) {
 								}
 							}
 		case 8		{ print "PIR5=$RuSenVal{PIR5}\n" if $debug;
-								if ($RuSenVal{PIR5} eq "Detect"){
+								if ($RuSenVal{PIR5} eq "Move"){
 									print "Intruder detected. Enable Sirene.\n" if $debug;
-									system "./playsiren.pl";
+									system "./playsiren.pl", "rettocam.mp3";
 									tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{RedAlert_unlock});
 									set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'RedAlert');
 									$GameStep++;
@@ -260,19 +261,21 @@ until ($GameStep == $LastGameStep) {
 									set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLW');
 									tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{DL34b_lock});
 									set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DL34b');
+									system "mpg123", "-q", "./sound/laugh.mp3";
 									$GameStep++;
 									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
 								}
 							}
-		case 10		{ print "Table KEYS=$RuSenVal{KEY0}\n" if $debug;
+		case 10		{ print "Waiting for code #3\n" if $debug;}
+		case 11		{ print "Table KEYS=$RuSenVal{KEY0}\n" if $debug;
 								if ($RuSenVal{KEY0} eq "Open"){
 									print "KEY0 has been turned on. Light TruncLed.\n" if $debug;
 									TruncLed(1);
 								}
 							}
-		case 11		{ print "TruncButton=$RuSenVal{TruncButton} \n" if $debug;
+		case 12		{ print "TruncButton=$RuSenVal{TruncButton} \n" if $debug;
 								if ($RuSenVal{TruncButton} eq "Open"){
-									if ($RuSenVal{KEY0} eq "Open")){
+									if ($RuSenVal{KEY0} eq "Open"){
 										print "TruncButton has been pushed and KEY0 still turned on. Open DL34a.\n" if $debug;
 										tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{DL34a_unlock});
 										set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DL34a');
@@ -286,7 +289,7 @@ until ($GameStep == $LastGameStep) {
 									}
 								}
 							}
-		case 12		{ print "DD34a=$RuSenVal{DD34a}\n UZ0=$RuSenVal{UZ0}" if $debug;
+		case 13		{ print "DD34a=$RuSenVal{DD34a} UZ0=$RuSenVal{UZ0}\n" if $debug;
 								if ($RuSenVal{UZ0} eq "Detect"){
 									if ($RuSenVal{DD34a} eq "Close"){
 										if ($RuSenVal{KEY0} eq "Open"){
@@ -302,7 +305,274 @@ until ($GameStep == $LastGameStep) {
 									}
 								}
 							}
-		case 13		{
+		case 14		{ print "DD34b=$RuSenVal{DD34b} UZ0=$RuSenVal{UZ0}\n" if $debug;
+								if ($RuSenVal{UZ0} eq "Empty"){
+									if ($RuSenVal{DD34b} eq "Close"){
+										tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{DL34b_lock});
+										set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DL34b');
+										$GameStep++;
+										set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+									}
+								}
+							}
+		case 15		{ print "Table KEYS=$RuSenVal{KEY0}\n" if $debug;
+								if ($GameStatus{Players} > 3){
+									if ($RuSenVal{KEY0} eq "Open"){
+										print "KEY0 has been turned on. Light TruncLed.\n" if $debug;
+										TruncLed(1);
+									}
+								} else {
+									$GameStep++;
+									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+								}
+							}
+		case 16		{ print "TruncButton=$RuSenVal{TruncButton}\n" if $debug;
+								if ($GameStatus{Players} > 3){
+									if ($RuSenVal{TruncButton} eq "Open"){
+										if ($RuSenVal{KEY0} eq "Open"){
+											print "TruncButton has been pushed and KEY0 still turned on. Open DL34a.\n" if $debug;
+											tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{DL34a_unlock});
+											set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DL34a');
+											$GameStep++;
+											set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+											TruncLed(0);
+										}else{
+											TruncLed(0);
+											$GameStep--;
+											set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+										}
+									}
+								} else {
+									$GameStep++;
+									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+								}
+							}
+		case 17		{ print "UZ0=$RuSenVal{UZ0} DD34a=$RuSenVal{DD34a}\n " if $debug;
+								if ($GameStatus{Players} > 3){
+									if ($RuSenVal{UZ0} eq "Detect"){
+										if ($RuSenVal{DD34a} eq "Close"){
+											if ($RuSenVal{KEY0} eq "Open"){
+												print "UZ0 detected, DD34a closed, KEY0 turned. Transpond.\n" if $debug;
+												tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{DL34a_lock});
+												set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DL34a');
+												sleep 3;
+												tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{DL34b_unlock});
+												set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DL34b');
+												$GameStep++;
+												set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+											}
+										}
+									}
+								} else {
+									$GameStep++;
+									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+								}
+							}
+		case 18		{ print "DD34b=$RuSenVal{DD34b} UZ0=$RuSenVal{UZ0}\n" if $debug;
+								if ($GameStatus{Players} > 3){
+									if ($RuSenVal{UZ0} eq "Empty"){
+										if ($RuSenVal{DD34b} eq "Close"){
+											tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{DL34b_lock});
+											set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DL34b');
+											$GameStep++;
+											set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+										}
+									}
+								} else {
+									$GameStep++;
+									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+								}
+							}
+		case 19		{ print "Table KEYS=$RuSenVal{KEY0}\n" if $debug;
+								if ($GameStatus{Players} > 4){
+									if ($RuSenVal{KEY0} eq "Open"){
+										print "KEY0 has been turned on. Light TruncLed.\n" if $debug;
+										TruncLed(1);
+									}
+								} else {
+									$GameStep++;
+									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+								}
+							}
+		case 20		{ print "TruncButton=$RuSenVal{TruncButton}\n" if $debug;
+								if ($GameStatus{Players} > 4){
+									if ($RuSenVal{TruncButton} eq "Open"){
+										if ($RuSenVal{KEY0} eq "Open"){
+											print "TruncButton has been pushed and KEY0 still turned on. Open DL34a.\n" if $debug;
+											tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{DL34a_unlock});
+											set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DL34a');
+											$GameStep++;
+											set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+											TruncLed(0);
+										}else{
+											TruncLed(0);
+											$GameStep--;
+											set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+										}
+									}
+								} else {
+									$GameStep++;
+									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+								}
+							}
+		case 21		{ print "UZ0=$RuSenVal{UZ0} DD34a=$RuSenVal{DD34a}\n" if $debug;
+								if ($GameStatus{Players} > 4){
+									if ($RuSenVal{UZ0} eq "Detect"){
+										if ($RuSenVal{DD34a} eq "Close"){
+											if ($RuSenVal{KEY0} eq "Open"){
+												print "UZ0 detected, DD34a closed, KEY0 turned. Transpond.\n" if $debug;
+												tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{DL34a_lock});
+												set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DL34a');
+												sleep 3;
+												tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{DL34b_unlock});
+												set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DL34b');
+												$GameStep++;
+												set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+											}
+										}
+									}
+								} else {
+									$GameStep++;
+									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+								}
+							}
+		case 22		{ print "DD34b=$RuSenVal{DD34b} UZ0=$RuSenVal{UZ0}\n" if $debug;
+								if ($GameStatus{Players} > 4){
+									if ($RuSenVal{UZ0} eq "Empty"){
+										if ($RuSenVal{DD34b} eq "Close"){
+											tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{DL34b_lock});
+											set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DL34b');
+											$GameStep++;
+											set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+										}
+									}
+								} else {
+									$GameStep++;
+									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+								}
+							}
+		case 23		{ print "nfc1=$RuSenVal{NFC1} nfc2=$RuSenVal{NFC2} nfc3=$RuSenVal{NFC3}\n" if $debug;
+								if ($GameStatus{Players} == 3) {
+									if ($RuSenVal{NFC1} eq $GameStatus{NFC_red}) {
+										system "mpg123", "-q", "./sound/malfunction.mp3";
+										tell_order($RuIps{RU_02}, $RU_orders{RU_02}->{DLLightAlarm_unlock});
+										set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLLightAlarm');
+										tell_order($RuIps{RU_04}, $RU_orders{RU_04}->{DLW_lock});
+										set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DLW');
+										tell_order($RuIps{RU_04}, $RU_orders{RU_02}->{DLdpk_unlock});
+										set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLdpk');
+										$GameStep++;
+										set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+									}
+								}
+								if ($GameStatus{Players} == 4) {
+									if (($RuSenVal{NFC1} eq $GameStatus{NFC_red}) && ($RuSenVal{NFC2} eq $GameStatus{NFC_green})) {
+										system "mpg123", "-q", "./sound/malfunction.mp3";
+										tell_order($RuIps{RU_02}, $RU_orders{RU_02}->{DLLightAlarm_unlock});
+										set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLLightAlarm');
+										tell_order($RuIps{RU_04}, $RU_orders{RU_04}->{DLW_lock});
+										set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DLW');
+										tell_order($RuIps{RU_04}, $RU_orders{RU_02}->{DLdpk_unlock});
+										set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLdpk');
+										$GameStep++;
+										set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+									}
+								}
+								if ($GameStatus{Players} == 5) {
+									if (($RuSenVal{NFC1} eq $GameStatus{NFC_red}) && ($RuSenVal{NFC2} eq $GameStatus{NFC_green}) && ($RuSenVal{NFC3} eq $GameStatus{NFC_blue})){
+										system "mpg123", "-q", "./sound/malfunction.mp3";
+										tell_order($RuIps{RU_02}, $RU_orders{RU_02}->{DLLightAlarm_unlock});
+										set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLLightAlarm');
+										tell_order($RuIps{RU_04}, $RU_orders{RU_04}->{DLW_lock});
+										set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DLW');
+										tell_order($RuIps{RU_04}, $RU_orders{RU_02}->{DLdpk_unlock});
+										set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLdpk');
+										$GameStep++;
+										set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+									}
+								}
+							}
+		case 24		{ print "nfc4=$RuSenVal{NFC4} nfc5=$RuSenVal{NFC5} nfc6=$RuSenVal{NFC6}\n" if $debug;
+								if ($GameStatus{Players} == 3) {
+									if ($RuSenVal{NFC4} eq $GameStatus{NFC_red}){
+										tell_order($RuIps{RU_05}, $RU_orders{RU_05}->{DLGH_unlock});
+										set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLGH');
+										sleep 2;
+										tell_order($RuIps{RU_05}, $RU_orders{RU_05}->{Grate_open});
+										set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLGrate');
+										tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{DL34a_unlock});
+										set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DL34a');
+										tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{DL34b_unlock});
+										set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DL34b');
+										$GameStep++;
+										set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+									}
+								}
+								if ($GameStatus{Players} == 4) {
+									if (($RuSenVal{NFC4} eq $GameStatus{NFC_red}) && ($RuSenVal{NFC5} eq $GameStatus{NFC_green})) {
+										tell_order($RuIps{RU_05}, $RU_orders{RU_05}->{DLGH_unlock});
+										set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLGH');
+										sleep 2;
+										tell_order($RuIps{RU_05}, $RU_orders{RU_05}->{Grate_open});
+										set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLGrate');
+										tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{DL34a_unlock});
+										set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DL34a');
+										tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{DL34b_unlock});
+										set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DL34b');
+										$GameStep++;
+										set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+									}
+								}
+								if ($GameStatus{Players} == 5) {
+									if (($RuSenVal{NFC4} eq $GameStatus{NFC_red}) && ($RuSenVal{NFC5} eq $GameStatus{NFC_green}) && ($RuSenVal{NFC6} eq $GameStatus{NFC_blue})){
+										tell_order($RuIps{RU_05}, $RU_orders{RU_05}->{DLGH_unlock});
+										set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLGH');
+										sleep 2;
+										tell_order($RuIps{RU_05}, $RU_orders{RU_05}->{Grate_open});
+										set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLGrate');
+										tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{DL34a_unlock});
+										set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DL34a');
+										tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{DL34b_unlock});
+										set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DL34b');
+										$GameStep++;
+										set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+									}
+								}
+							}
+		case 25		{ print "PIR6=$RuSenVal{PIR6}\n" if $debug;
+								if ($RuSenVal{PIR6} eq "Move"){
+									tell_order($RuIps{RU_06}, $RU_orders{RU_06}->{DLven_lock});
+									set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DLven');
+									sleep 3;
+									tell_order($RuIps{RU_06}, $RU_orders{RU_06}->{DLL1_lock});
+									set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DLL1');
+									$GameStep++;
+									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+								}
+							}
+		case 26		{ print "WIRE=$RuSenVal{WIRE}\n" if $debug;
+								if ($RuSenVal{WIRE} eq "Cut") {
+									tell_order($RuIps{RU_06}, $RU_orders{RU_06}->{DLp2_unlock});
+									set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLp2');
+									$GameStep++;
+									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+								}
+							}
+		case 27		{ print "NFC0=$RuSenVal{NFC0}\n" if $debug;
+								if ($RuSenVal{NFC0} eq $GameStatus{NFC_yelow}) {
+									tell_order($RuIps{RU_01}, $RU_orders{RU_01}->{DL12_unlock});
+									set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DL12');
+									$GameStep++;
+									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+								}
+							}
+		case 28		{ print "Waiting for all\n" if $debug;}
+		case 29		{ print "Show the final movie\n" if $debug;
+								if ($RunOnceFlag){
+									tell_order($RuIps{RU_01}, $RU_orders{RU_01}->{DL12_lock});
+									set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DL12');
+									$RunOnceFlag = 0;
+								}
 							}
 		else			{	print "Current step is $GameStep \n" if $debug;
 								$GameStep = $LastGameStep;
@@ -311,6 +581,10 @@ until ($GameStep == $LastGameStep) {
 	print "$GameStep step\n" if $debug;
 	sleep 1;
 }
+
+tell_order($RuIps{RU_01}, $RU_orders{RU_01}->{DL1_unlock});
+set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DL1');
+
 set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
 set_val_dbi('GameStat', 'Value', 'Stop', 'Param', 'GameStat');
 $dbh->disconnect();
@@ -441,7 +715,7 @@ sub prepare_room {
 	set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLven');
 	tell_order($RuIps{RU_05}, $RU_orders{RU_05}->{DLGH_unlock});
 	set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLGH');
-	sleep 1;
+	sleep 2;
 	tell_order($RuIps{RU_05}, $RU_orders{RU_05}->{Grate_open});
 	set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLGrate');
 	tell_order($RuIps{RU_05}, $RU_orders{RU_05}->{DLL_unlock});
