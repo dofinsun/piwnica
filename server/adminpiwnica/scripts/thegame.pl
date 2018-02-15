@@ -459,7 +459,7 @@ until ($GameStep == $LastGameStep) {
 										set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLLightAlarm');
 										tell_order($RuIps{RU_04}, $RU_orders{RU_04}->{DLW_lock});
 										set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DLW');
-										tell_order($RuIps{RU_04}, $RU_orders{RU_02}->{DLdpk_unlock});
+										tell_order($RuIps{RU_02}, $RU_orders{RU_02}->{DLdpk_unlock});
 										set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLdpk');
 										$GameStep++;
 										set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
@@ -472,7 +472,7 @@ until ($GameStep == $LastGameStep) {
 										set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLLightAlarm');
 										tell_order($RuIps{RU_04}, $RU_orders{RU_04}->{DLW_lock});
 										set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DLW');
-										tell_order($RuIps{RU_04}, $RU_orders{RU_02}->{DLdpk_unlock});
+										tell_order($RuIps{RU_02}, $RU_orders{RU_02}->{DLdpk_unlock});
 										set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLdpk');
 										$GameStep++;
 										set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
@@ -485,7 +485,7 @@ until ($GameStep == $LastGameStep) {
 										set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLLightAlarm');
 										tell_order($RuIps{RU_04}, $RU_orders{RU_04}->{DLW_lock});
 										set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DLW');
-										tell_order($RuIps{RU_04}, $RU_orders{RU_02}->{DLdpk_unlock});
+										tell_order($RuIps{RU_02}, $RU_orders{RU_02}->{DLdpk_unlock});
 										set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLdpk');
 										$GameStep++;
 										set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
@@ -584,6 +584,8 @@ until ($GameStep == $LastGameStep) {
 
 tell_order($RuIps{RU_01}, $RU_orders{RU_01}->{DL1_unlock});
 set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DL1');
+tell_order($RuIps{RU_06}, $RU_orders{RU_06}->{DLven_unlock});
+set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLven');
 
 set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
 set_val_dbi('GameStat', 'Value', 'Stop', 'Param', 'GameStat');
