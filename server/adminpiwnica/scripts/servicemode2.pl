@@ -36,7 +36,8 @@ foreach my $RU_name (keys %RU_orders) {
     }
   }
 }
-
+tell_order($RuIps{RU_05}, $RU_orders{RU_05}->{DLS_lock});
+set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLS');
 tell_order($RuIps{RU_05}, $RU_orders{RU_05}->{DLGH_unlock});
 set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLGH');
 sleep 2;
