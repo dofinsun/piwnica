@@ -29,7 +29,7 @@ my $dbh = DBI->connect("DBI:SQLite:dbname=pigame.db",
 set_val_dbi('GameStat', 'Value', $Players, 'Param', 'Players');
 
 my $GameStep = 0;
-my $LastGameStep = 30;
+my $LastGameStep = 37;
 my $ForceNextLevel = 0;
 my $RunOnceFlag = 1;
 
@@ -151,6 +151,7 @@ until ($GameStep == $LastGameStep) {
 											tell_order($RuIps{RU_02}, $RU_orders{RU_02}->{DL23_lock});
 											set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DL34a');
 										}else{
+											print "TruncButton has been pushed but KEY0, KEY1 not turned on. Go back on previous step.\n" if $debug;
 											TruncLed(0);
 											$GameStep--;
 											set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
@@ -169,6 +170,7 @@ until ($GameStep == $LastGameStep) {
 											tell_order($RuIps{RU_02}, $RU_orders{RU_02}->{DL23_lock});
 											set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DL34a');
 										}else{
+											print "TruncButton has been pushed but KEY0,1,2 not turned on. Go back on previous step.\n" if $debug;
 											TruncLed(0);
 											$GameStep--;
 											set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
@@ -187,6 +189,7 @@ until ($GameStep == $LastGameStep) {
 											tell_order($RuIps{RU_02}, $RU_orders{RU_02}->{DL23_lock});
 											set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DL34a');
 										}else{
+											print "TruncButton has been pushed but KEY0,1,2,3 not turned on. Go back on previous step.\n" if $debug;
 											TruncLed(0);
 											$GameStep--;
 											set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
@@ -289,6 +292,7 @@ until ($GameStep == $LastGameStep) {
 										set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
 										TruncLed(0);
 									}else{
+										print "TruncButton has been pushed but KEY0 not turned on. Go back on previous step.\n" if $debug;
 										TruncLed(0);
 										$GameStep--;
 										set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
@@ -340,6 +344,7 @@ until ($GameStep == $LastGameStep) {
 										TruncLed(1);
 									}
 								} else {
+									print "Players less than 4. Skip this step.\n" if $debug;
 									$GameStep++;
 									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
 								}
@@ -355,12 +360,14 @@ until ($GameStep == $LastGameStep) {
 											set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
 											TruncLed(0);
 										}else{
+											print "TruncButton has been pushed but KEY0 not turned on. Go back on previous step.\n" if $debug;
 											TruncLed(0);
 											$GameStep--;
 											set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
 										}
 									}
 								} else {
+									print "Players less than 4. Skip this step.\n" if $debug;
 									$GameStep++;
 									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
 								}
@@ -372,6 +379,7 @@ until ($GameStep == $LastGameStep) {
 										set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
 									}
 								} else {
+									print "Players less than 4. Skip this step.\n" if $debug;
 									$GameStep++;
 									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
 								}
@@ -393,6 +401,7 @@ until ($GameStep == $LastGameStep) {
 										}
 									}
 								} else {
+									print "Players less than 4. Skip this step.\n" if $debug;
 									$GameStep++;
 									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
 								}
@@ -404,6 +413,7 @@ until ($GameStep == $LastGameStep) {
 										set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
 									}
 								} else {
+									print "Players less than 4. Skip this step.\n" if $debug;
 									$GameStep++;
 									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
 								}
@@ -419,6 +429,7 @@ until ($GameStep == $LastGameStep) {
 										}
 									}
 								} else {
+									print "Players less than 4. Skip this step.\n" if $debug;
 									$GameStep++;
 									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
 								}
@@ -430,6 +441,7 @@ until ($GameStep == $LastGameStep) {
 										TruncLed(1);
 									}
 								} else {
+									print "Players less than 5. Skip this step.\n" if $debug;
 									$GameStep++;
 									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
 								}
@@ -445,12 +457,14 @@ until ($GameStep == $LastGameStep) {
 											set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
 											TruncLed(0);
 										}else{
+											print "TruncButton has been pushed but KEY0 not turned on. Go back on previous step.\n" if $debug;
 											TruncLed(0);
 											$GameStep--;
 											set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
 										}
 									}
 								} else {
+									print "Players less than 5. Skip this step.\n" if $debug;
 									$GameStep++;
 									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
 								}
@@ -462,6 +476,7 @@ until ($GameStep == $LastGameStep) {
 										set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
 									}
 								} else {
+									print "Players less than 5. Skip this step.\n" if $debug;
 									$GameStep++;
 									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
 								}
@@ -483,6 +498,7 @@ until ($GameStep == $LastGameStep) {
 										}
 									}
 								} else {
+									print "Players less than 5. Skip this step.\n" if $debug;
 									$GameStep++;
 									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
 								}
@@ -494,6 +510,7 @@ until ($GameStep == $LastGameStep) {
 										set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
 									}
 								} else {
+									print "Players less than 5. Skip this step.\n" if $debug;
 									$GameStep++;
 									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
 								}
@@ -509,6 +526,7 @@ until ($GameStep == $LastGameStep) {
 										}
 									}
 								} else {
+									print "Players less than 5. Skip this step.\n" if $debug;
 									$GameStep++;
 									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
 								}
@@ -559,7 +577,7 @@ until ($GameStep == $LastGameStep) {
 									if ($RuSenVal{NFC4} eq $GameStatus{NFC_red}){
 										tell_order($RuIps{RU_05}, $RU_orders{RU_05}->{DLGH_unlock});
 										set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLGH');
-										sleep 2;
+										sleep 3;
 										tell_order($RuIps{RU_05}, $RU_orders{RU_05}->{Grate_open});
 										set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLGrate');
 										tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{DL34a_unlock});
@@ -574,7 +592,7 @@ until ($GameStep == $LastGameStep) {
 									if (($RuSenVal{NFC4} eq $GameStatus{NFC_red}) && ($RuSenVal{NFC5} eq $GameStatus{NFC_green})) {
 										tell_order($RuIps{RU_05}, $RU_orders{RU_05}->{DLGH_unlock});
 										set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLGH');
-										sleep 2;
+										sleep 3;
 										tell_order($RuIps{RU_05}, $RU_orders{RU_05}->{Grate_open});
 										set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLGrate');
 										tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{DL34a_unlock});
@@ -589,7 +607,7 @@ until ($GameStep == $LastGameStep) {
 									if (($RuSenVal{NFC4} eq $GameStatus{NFC_red}) && ($RuSenVal{NFC5} eq $GameStatus{NFC_green}) && ($RuSenVal{NFC6} eq $GameStatus{NFC_blue})){
 										tell_order($RuIps{RU_05}, $RU_orders{RU_05}->{DLGH_unlock});
 										set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLGH');
-										sleep 2;
+										sleep 3;
 										tell_order($RuIps{RU_05}, $RU_orders{RU_05}->{Grate_open});
 										set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLGrate');
 										tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{DL34a_unlock});
@@ -636,7 +654,9 @@ until ($GameStep == $LastGameStep) {
 									$RunOnceFlag = 0;
 								}
 							}
-		else			{	print "Current step is $GameStep \n" if $debug;
+		case 37		{ print "This is a last step. $GameStep \n" if $debug;
+							}
+		else			{	print "Crap! Somthing happened wrong!!! Current step is $GameStep \n" if $debug;
 								$GameStep = $LastGameStep;
 							}
 	}
@@ -788,6 +808,8 @@ sub prepare_room {
 	set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLS');
 	tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{DLComBox_unlock});
 	set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLComBox');
+	tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{DLTruncLed_off});
+	set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DLTruncLed');
 }
 
 sub TruncLed {
