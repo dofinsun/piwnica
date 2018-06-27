@@ -75,6 +75,8 @@
 		<button type="Button" id="StartButton" onclick="GameStart()">Start</button><br>&nbsp;&nbsp;&nbsp;
 		<p><button type="Button" onclick="loadDoc('scripts/servicemode.pl', dummy);">ServiceMode</button></p>
 		<p><button type="Button" onclick="loadDoc('scripts/servicemode2.pl', dummy);">ServiceMode2</button></p>
+		<p><button type="Button" onclick="loadDoc('scripts/opengate.pl', dummy);">OpenGate</button></p>
+		<p><button type="Button" onclick="loadDoc('scripts/closegate.pl', dummy);">CloseGate</button></p>
 	</div>
 	<br>
 	<div id="secondpage"></div>
@@ -83,7 +85,9 @@
 <script>
 	var firstpagedata = "<p id='currentstep'></p><p id='reaction'></p><br>\
 	<button type='Button' id='nextStepButton' onclick='loadDoc(\"scripts/put_sig.pl?FNS=1\", dummy)'>NextStep</button>&nbsp;&nbsp;&nbsp;\
-	<button type='Button' id='exitTheGame' onclick='loadDoc(\"scripts/put_sig.pl?FNS=2\", dummy)'>HappyEnd</button>";
+	<button type='Button' id='previousStepButton' onclick='loadDoc(\"scripts/put_sig.pl?FNS=3\", dummy)'>PreviousStep</button>&nbsp;&nbsp;&nbsp;\
+	<button type='Button' id='exitTheGame' onclick='loadDoc(\"scripts/put_sig.pl?FNS=2\", dummy)'>HappyEnd</button><br><br>\
+	<button type='Button' id='stepInButton' onclick='loadDoc(\"scripts/stepin.pl\", dummy)'>StepIn</button>";
 	var myObjData;
 
 	function myTimer() {

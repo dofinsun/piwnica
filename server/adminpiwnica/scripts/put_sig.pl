@@ -30,7 +30,7 @@ foreach $pair (@pairs) {
 #$FORM{FNS} = 1;
 if (defined($FORM{FNS}) && $FORM{FNS} =~ /^\d$/) {
   my $dbh = DBI->connect("DBI:SQLite:dbname=pigame.db",
-    undef, undef, { RaiseError => 1 }) or die $DBI::errstr;
+    undef, undef, { RaiseError => 1, AutoCommit => 1 }) or die $DBI::errstr;
   my $stmt = qq(UPDATE GameStat SET Value = '$FORM{FNS}' WHERE Param = 'ForceNextLevel';);
   my $rv = $dbh->do($stmt) or die $DBI::errstr;
   if ($rv <0 ){

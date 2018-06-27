@@ -1,8 +1,6 @@
 #!/usr/bin/perl
-
 use strict;
 use warnings;
-use diagnostics;
 use Net::Telnet ();
 use DBI;
 
@@ -20,43 +18,15 @@ my %RU_orders = ("RU_01" => {"status", "s", "DL1_unlock", "q", "DL1_lock", "w", 
 "DLven_lock", "y", "DLL0_unlock", "u", "DLL0_lock", "i", "DLL1_unlock", "a", "DLL1_lock", "d", "DLL2_unlock", "f", "DLL2_lock", "g"});
 
 my $tel = new Net::Telnet (Timeout => 5, Port => 404, Errmode => "return");
-
 my $dbh = DBI->connect("DBI:SQLite:dbname=pigame.db",
 	undef, undef, { RaiseError => 1, AutoCommit => 1 }) or die $DBI::errstr;
+
 my %RuIps = load_val_dbi('RuName', 'RuIp', 'RmUnits');
 
-
-foreach my $RU_name (keys %RU_orders) {
-  foreach my $RU_comm (keys %{$RU_orders{$RU_name}}){
-    if ($RU_comm =~ /_unlock/) {
-      tell_order($RuIps{$RU_name}, $RU_orders{$RU_name}->{$RU_comm});
-			my $RU_hasp = $RU_comm;
-			$RU_hasp =~ s/_unlock//;
-			set_val_dbi('GameStat', 'Value', 'Open', 'Param', $RU_hasp);
-    }
-  }
-}
-tell_order($RuIps{RU_06}, $RU_orders{RU_06}->{DLp1_lock});
-set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DLp1');
-tell_order($RuIps{RU_06}, $RU_orders{RU_06}->{DLp2_lock});
-set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DLp2');
-tell_order($RuIps{RU_05}, $RU_orders{RU_05}->{DLGH_unlock});
-set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLGH');
-sleep 2;
-tell_order($RuIps{RU_05}, $RU_orders{RU_05}->{Grate_open});
-set_val_dbi('GameStat', 'Value', 'Open', 'Param', 'DLGrate');
-tell_order($RuIps{RU_04}, $RU_orders{RU_04}->{DLT_lock});
-set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DLT');
-tell_order($RuIps{RU_03}, $RU_orders{RU_03}->{RedAlert_lock});
-set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'RedAlert');
-tell_order($RuIps{RU_02}, $RU_orders{RU_02}->{DLdpk_lock});
-set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DLdpk');
-tell_order($RuIps{RU_02}, $RU_orders{RU_02}->{DLLightAlarm_lock});
-set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DLLightAlarm');
-tell_order($RuIps{RU_01}, $RU_orders{RU_01}->{DL1_lock});
-set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DL1');
-
-$dbh->disconnect();
+tell_order($RuIps{RU_05}, $RU_orders{RU_05}->{DLGH_lock});
+set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DLGH');
+tell_order($RuIps{RU_05}, $RU_orders{RU_05}->{Grate_close});
+set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DLGrate');
 
 print "Content-type:text/html\r\n\r\n";
 print "<html>";
@@ -64,7 +34,7 @@ print "<head>";
 print "<title></title>";
 print "</head>";
 print "<body>";
-print "MK-3 in service state.";
+print "Order sended to ComBox.";
 print "</body>";
 print "</html>";
 
@@ -80,20 +50,12 @@ sub load_val_dbi {
 			while(my @row = $sth->fetchrow_array()) {
 			$returned_val{$row[0]} = $row[1];
 			}
-			print join "=", %returned_val, "\n" if $debug;
+			if ($debug) {
+				while (my ($k,$v)=each %returned_val) {
+					print ":$k=$v:\n"
+				}
+			}
 			return %returned_val;
-		}
-	}
-}
-
-sub set_val_dbi {
-	if ((defined $_[0]) && (defined $_[1]) && (defined $_[2]) && (defined $_[3]) && (defined $_[4])) {
-		my $stmt =qq(UPDATE $_[0] set $_[1] = '$_[2]' where $_[3] = '$_[4]';);
-		my $rv = $dbh->do($stmt) or die $DBI::errstr;
-		if ($rv <0 ){
-			die $DBI::errstr;
-		} else {
-			print "Updated $rv rows: $stmt\n" if $debug;
 		}
 	}
 }
@@ -105,9 +67,21 @@ sub tell_order {
 	  if ($tel_ok) {
 	    $tel -> put($order);
 	    $tel->close;
-			print "tell_order($ip, $order);\n" if $debug;
 	  } else {
 	    die $tel->errmsg;
 	  }
+	}
+	print "tell_order($ip, $order);\n" if $debug;
+}
+
+sub set_val_dbi {
+	if ((defined $_[0]) && (defined $_[1]) && (defined $_[2]) && (defined $_[3]) && (defined $_[4])) {
+		my $stmt =qq(UPDATE $_[0] set $_[1] = '$_[2]' where $_[3] = '$_[4]';);
+		my $rv = $dbh->do($stmt) or die $DBI::errstr;
+		if ($rv <0 ){
+			die $DBI::errstr;
+		} else {
+			print "Updated $rv rows: $stmt\n" if $debug;
+		}
 	}
 }

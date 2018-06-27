@@ -7,7 +7,7 @@ use Net::Telnet ();
 use DBI;
 use Switch;
 
-my $debug = 1;
+my $debug = 0;
 
 my $script_path = $0;
 $script_path =~ s/\/[\w \d]+\.pl$//;
@@ -56,7 +56,17 @@ until ($GameStep == $LastGameStep) {
 	print localtime . "\n" if $debug;
 	update_val_dbi();
 	$ForceNextLevel = load_FNL();
-	if ($ForceNextLevel == 2) {
+	if ($ForceNextLevel == 4) {
+		%RuSenVal = load_val_dbi('SensorName', 'SensorStatus', 'RmUnitStatus');
+		$ForceNextLevel = 0;
+		set_val_dbi('GameStat', 'Value', $ForceNextLevel, 'Param', 'ForceNextLevel');
+	} elsif ($ForceNextLevel == 3) {
+		print "Recived signal go back on previous Step\n" if $debug;
+		$GameStep--;
+		set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
+		$ForceNextLevel = 0;
+		set_val_dbi('GameStat', 'Value', $ForceNextLevel, 'Param', 'ForceNextLevel');
+	} elsif ($ForceNextLevel == 2) {
 		print "Recived signal END_of_the_Game\n" if $debug;
 		$GameStep = $LastGameStep;
 		$ForceNextLevel = 0;
@@ -623,8 +633,7 @@ until ($GameStep == $LastGameStep) {
 								if ($RuSenVal{PIR6} eq "Move"){
 									tell_order($RuIps{RU_06}, $RU_orders{RU_06}->{DLven_lock});
 									set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DLven');
-									sleep 3;
-									tell_order($RuIps{RU_06}, $RU_orders{RU_06}->{DLL1_lock});
+									tell_order($RuIps{RU_06}, $RU_orders{RU_06}->{DLL1_unlock});
 									set_val_dbi('GameStat', 'Value', 'Close', 'Param', 'DLL1');
 									$GameStep++;
 									set_val_dbi('GameStat', 'Value', $GameStep, 'Param', 'GameLevel');
